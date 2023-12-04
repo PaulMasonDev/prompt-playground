@@ -88,6 +88,6 @@ const styles = StyleSheet.create({
   },
   responseText: {
     color: "#e0e0e0", // Example style, adjust as needed
-    fontSize: 16,
+    fontSize: 18,
   },
 });

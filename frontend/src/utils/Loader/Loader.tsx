@@ -1,5 +1,5 @@
 import React from "react";
-import { View, ActivityIndicator, StyleSheet, Modal } from "react-native";
+import { View, ActivityIndicator, StyleSheet, Modal, Text } from "react-native";
 
 const Spinner = ({ isLoading }: { isLoading: boolean }) => {
   return (
@@ -11,6 +11,10 @@ const Spinner = ({ isLoading }: { isLoading: boolean }) => {
     >
       <View style={styles.overlay}>
         <ActivityIndicator size="large" color="#0000ff" />
+        <Text style={styles.message}>
+          Loading...This could take up to 30 seconds. Our robots are researching
+          your question and becoming an expert on the topic as we speak!
+        </Text>
       </View>
     </Modal>
   );
@@ -26,6 +30,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent background
+  },
+  message: {
+    fontFamily: "monospace",
+    color: "white",
+    fontSize: 20,
+    padding: 40,
   },
 });
 
