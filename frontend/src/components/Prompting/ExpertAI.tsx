@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import { StyledButton } from "../UIComponents/StyledButton";
 import { getPromptResponse } from "../../clientLibrary/Prompting";
 import useUserStore from "../../utils/store";
 

@@ -25,7 +25,7 @@ def expert_prompt(message: str, type: str):
 
         if len(type) != 0:  
             system_message = system_message + f"Explain this to me as if I was a {type}."
-            
+
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             # TODO: Make the content property for the system into a db value that can be edited by an admin.
@@ -35,7 +35,7 @@ def expert_prompt(message: str, type: str):
                 {"role": "user", "content": f"{message}"}
             ],
             temperature=0.7,
-            max_tokens=300,
+            max_tokens=500,
             top_p=1,
             frequency_penalty=0.8,
             presence_penalty=1.21,
