@@ -3,6 +3,7 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 // import Auth from "../Auth/Auth";
 import { ExpertAI } from "../Prompting/ExpertAI";
+import { CoverLetter } from "../Prompting/CoverLetter";
 
 const Tab = createBottomTabNavigator();
 
@@ -21,6 +22,11 @@ function BottomTabNavigator() {
         name="ExpertAI"
         component={ExpertAI}
         options={{ tabBarAccessibilityLabel: "ExpertAI" }}
+      />
+      <Tab.Screen
+        name="Cover Letter"
+        component={CoverLetter}
+        options={{ tabBarAccessibilityLabel: "CoverLetter" }}
       />
     </Tab.Navigator>
   );

@@ -8,52 +8,55 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import { getPromptResponse } from "../../clientLibrary/Prompting";
+import {
+  getCoverLetterResponse,
+  getPromptResponse,
+} from "../../clientLibrary/Prompting";
 import useUserStore from "../../utils/store";
 import Icon from "@expo/vector-icons/FontAwesome"; // Or any other icon set you prefer
 
-export const ExpertAI = () => {
-  const [prompt, setPrompt] = useState("");
-  const [type, setType] = useState("");
+export const CoverLetter = () => {
+  // const [prompt, setPrompt] = useState("");
+  const [resume, setResume] = useState("");
+  const [jobDesc, setJobDesc] = useState("");
   const [response, setResponse] = useState("");
-  const [responseHeader, setResponseHeader] = useState("");
 
   const { setLoading } = useUserStore();
 
   const handlePress = async () => {
     setLoading(true);
-    const apiResponse = await getPromptResponse(prompt, type);
-    console.log({ apiResponse });
-    setResponseHeader(prompt);
+    const apiResponse = await getCoverLetterResponse(resume, jobDesc);
+    // setResponseHeader(prompt);
     setResponse(apiResponse);
-    setPrompt("");
-    setType("");
+    // setPrompt("");
     setLoading(false);
   };
 
-  const copyToClipboard = (header: string, text: string) => {
-    Clipboard.setStringAsync(header + `\n` + text);
+  const copyToClipboard = (text: string) => {
+    Clipboard.setStringAsync(text);
     alert("Text copied to clipboard");
   };
 
-  const canSubmit = prompt;
+  const canSubmit = resume && jobDesc;
 
   return (
     <View style={styles.container}>
       <TextInput
         style={styles.textInput}
-        value={prompt}
-        onChangeText={setPrompt}
-        placeholder="What do you want to know how to do?"
+        value={jobDesc}
+        onChangeText={setJobDesc}
+        placeholder="Paste Job Description"
         placeholderTextColor="#e0e0e0" // Light color for the placeholder text
+        multiline
       />
-      {/* <TextInput
+      <TextInput
         style={styles.textInput}
-        value={type}
-        onChangeText={setType}
-        placeholder="Who is the audience? Leave blank for standard"
-        placeholderTextColor="#e0e0e0"
-      /> */}
+        value={resume}
+        onChangeText={setResume}
+        placeholder="Paste Resume"
+        placeholderTextColor="#e0e0e0" // Light color for the placeholder text
+        multiline
+      />
       <TouchableOpacity
         style={[styles.button, !canSubmit && styles.disabledButton]}
         onPress={handlePress}
@@ -69,7 +72,7 @@ export const ExpertAI = () => {
         <View style={styles.copyContainer}>
           <TouchableOpacity
             style={styles.copyIcon}
-            onPress={() => copyToClipboard(responseHeader, response)}
+            onPress={() => copyToClipboard(response)}
           >
             <Icon name="copy" size={20} color="#FFF" />
           </TouchableOpacity>
@@ -77,12 +80,7 @@ export const ExpertAI = () => {
       )}
 
       <ScrollView style={styles.responseTextContainer}>
-        <TouchableOpacity
-          onLongPress={() => copyToClipboard(responseHeader, response)}
-        >
-          {response && (
-            <Text style={styles.responseHeader}>{responseHeader}</Text>
-          )}
+        <TouchableOpacity onLongPress={() => copyToClipboard(response)}>
           <Text style={styles.responseText}>{response}</Text>
         </TouchableOpacity>
       </ScrollView>
