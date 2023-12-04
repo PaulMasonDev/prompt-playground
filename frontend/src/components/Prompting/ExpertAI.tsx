@@ -1,4 +1,5 @@
 import { useState } from "react";
+import * as Clipboard from "expo-clipboard";
 import {
   View,
   Text,
@@ -9,6 +10,7 @@ import {
 } from "react-native";
 import { getPromptResponse } from "../../clientLibrary/Prompting";
 import useUserStore from "../../utils/store";
+import Icon from "@expo/vector-icons/FontAwesome"; // Or any other icon set you prefer
 
 export const ExpertAI = () => {
   const [prompt, setPrompt] = useState("");
@@ -27,6 +29,11 @@ export const ExpertAI = () => {
     setPrompt("");
     setType("");
     setLoading(false);
+  };
+
+  const copyToClipboard = (header: string, text: string) => {
+    Clipboard.setStringAsync(header + `\n` + text);
+    alert("Text copied to clipboard");
   };
 
   return (
@@ -48,11 +55,26 @@ export const ExpertAI = () => {
       <TouchableOpacity style={styles.button} onPress={handlePress}>
         <Text style={styles.buttonText}>Submit</Text>
       </TouchableOpacity>
-      <ScrollView style={styles.responseContainer}>
-        {response && (
-          <Text style={styles.responseHeader}>{responseHeader}</Text>
-        )}
-        <Text style={styles.responseText}>{response}</Text>
+      {response && (
+        <View style={styles.copyContainer}>
+          <TouchableOpacity
+            style={styles.copyIcon}
+            onPress={() => copyToClipboard(responseHeader, response)}
+          >
+            <Icon name="copy" size={20} color="#FFF" />
+          </TouchableOpacity>
+        </View>
+      )}
+
+      <ScrollView style={styles.responseTextContainer}>
+        <TouchableOpacity
+          onLongPress={() => copyToClipboard(responseHeader, response)}
+        >
+          {response && (
+            <Text style={styles.responseHeader}>{responseHeader}</Text>
+          )}
+          <Text style={styles.responseText}>{response}</Text>
+        </TouchableOpacity>
       </ScrollView>
     </View>
   );
@@ -86,7 +108,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
-  responseContainer: {
+  copyContainer: {
+    position: "relative",
+    padding: 10,
+  },
+  responseTextContainer: {
     flex: 1, // Takes the remaining space of the screen
     marginTop: 10,
   },
@@ -98,5 +124,12 @@ const styles = StyleSheet.create({
   responseText: {
     color: "#e0e0e0", // Example style, adjust as needed
     fontSize: 18,
+  },
+  copyIcon: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+    padding: 5,
+    // Additional styling if needed
   },
 });
