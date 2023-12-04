@@ -14,6 +14,7 @@ export const ExpertAI = () => {
   const [prompt, setPrompt] = useState("");
   const [type, setType] = useState("");
   const [response, setResponse] = useState("");
+  const [responseHeader, setResponseHeader] = useState("");
 
   const { setLoading } = useUserStore();
 
@@ -21,6 +22,7 @@ export const ExpertAI = () => {
     setLoading(true);
     const apiResponse = await getPromptResponse(prompt, type);
     console.log({ apiResponse });
+    setResponseHeader(prompt);
     setResponse(apiResponse);
     setPrompt("");
     setType("");
@@ -47,6 +49,9 @@ export const ExpertAI = () => {
         <Text style={styles.buttonText}>Submit</Text>
       </TouchableOpacity>
       <ScrollView style={styles.responseContainer}>
+        {response && (
+          <Text style={styles.responseHeader}>{responseHeader}</Text>
+        )}
         <Text style={styles.responseText}>{response}</Text>
       </ScrollView>
     </View>
@@ -84,6 +89,11 @@ const styles = StyleSheet.create({
   responseContainer: {
     flex: 1, // Takes the remaining space of the screen
     marginTop: 10,
+  },
+  responseHeader: {
+    color: "#e0e0e0",
+    fontSize: 24,
+    fontWeight: "bold",
   },
   responseText: {
     color: "#e0e0e0", // Example style, adjust as needed
