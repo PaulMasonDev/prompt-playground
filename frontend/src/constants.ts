@@ -1,5 +1,4 @@
-let BACKEND_API_MUTABLE =
-  "https://prompt-playground-production.up.railway.app/";
+let BACKEND_API_MUTABLE = "https://prompt-playground-production.up.railway.app";
 if (window && window.location && window.location.hostname === "localhost") {
   BACKEND_API_MUTABLE = "http://localhost:8000";
 }
