@@ -36,9 +36,6 @@ def expert_prompt(message: str, type: str):
             ],
             temperature=0.7,
             max_tokens=500,
-            top_p=1,
-            frequency_penalty=0.8,
-            presence_penalty=1.21,
             stop=[");"]
         )
         return response.choices[0].message['content']
