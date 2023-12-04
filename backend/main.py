@@ -4,8 +4,6 @@ from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from database import Base, engine
 from auth import router as auth_router  # Import the router from auth.py
-from recipe import router as recipe_router
-from product import router as pricing_router
 # import requests
 # import base64
 
