@@ -98,6 +98,6 @@ export const handleLogout = async () => {
     return data;
   } catch (error) {
     console.error(error);
-    alert("Error, An error occurred during login.");
+    alert("Error, An error occurred during logout.");
   }
 };
