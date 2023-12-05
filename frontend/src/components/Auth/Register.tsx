@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, TextInput, StyleSheet } from "react-native";
 import { getUserInfo, handleRegistration } from "../../clientLibrary/Auth";
 import useUserStore from "../../utils/store";
-import { StyledButton } from "../UIComponents/StyledButton";
+import { StyledButton } from "../UIComponents/FormElements/StyledButton";
 
 const Register: React.FC = () => {
   const [username, setUsername] = useState("");

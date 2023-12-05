@@ -1,5 +1,5 @@
 import { TextInput } from "react-native";
-import { commonStyles } from "./commonStyles";
+import { commonStyles } from "../commonStyles";
 
 interface CustomTextInputProps {
   value: string;

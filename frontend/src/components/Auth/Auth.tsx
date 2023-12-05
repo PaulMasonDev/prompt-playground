@@ -4,7 +4,7 @@ import useUserStore from "../../utils/store";
 import Logout from "./Logout";
 import { Login } from "./Login";
 import Register from "./Register";
-import { StyledButton } from "../UIComponents/StyledButton";
+import { StyledButton } from "../UIComponents/FormElements/StyledButton";
 
 const AuthScreen: React.FC = () => {
   const [showRegister, setShowRegister] = useState(false);

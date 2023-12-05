@@ -11,10 +11,10 @@ openai.api_key = SECRET_KEY
 router = APIRouter()
 
 @router.get("/expert")
-def get_ai_response(message: str):
-    return expert_prompt(message)
+def get_ai_response(message: str, type: str):
+    return expert_prompt(message, type)
 
-def expert_prompt(message: str):
+def expert_prompt(message: str, type: str):
     try:
         system_message = """You are to take the role of an expert based on the nature of the question.
             For example, if someone asks you what 2 plus 2 is, your role would be an expert mathmatician.
@@ -27,6 +27,9 @@ def expert_prompt(message: str):
             If they talk about hurting themselves or harming others, you need to refer them to call 911 or seek medical
             assistance as soon as possible, and make it clear that you cannot help them with those types of inquiries
             in a polite manner."""
+
+        if len(type) > 0:
+            system_message = system_message + f"You should respond as though you are a {type}. If that doesn't make sense, and its possibly a language, then you should response in the language of {type}"
 
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",

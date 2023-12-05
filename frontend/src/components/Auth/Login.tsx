@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, TextInput, StyleSheet } from "react-native";
 import { handleLogin, getUserInfo } from "../../clientLibrary/Auth";
 import useUserStore from "../../utils/store";
-import { StyledButton } from "../UIComponents/StyledButton";
+import { StyledButton } from "../UIComponents/FormElements/StyledButton";
 
 export const Login = () => {
   const [username, setUsername] = useState("");

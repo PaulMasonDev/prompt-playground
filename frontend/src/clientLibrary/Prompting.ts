@@ -25,10 +25,10 @@ export const sendFeedback = async (feedback: FeedbackPayload) => {
   }
 };
 
-export const getPromptResponse = async (prompt: string) => {
+export const getPromptResponse = async (prompt: string, type: string) => {
   try {
     const response = await fetch(
-      `${BACKEND_API}/prompting/expert?message=${prompt}`,
+      `${BACKEND_API}/prompting/expert?message=${prompt}&type=${type}`,
       {
         method: "GET",
         headers: {

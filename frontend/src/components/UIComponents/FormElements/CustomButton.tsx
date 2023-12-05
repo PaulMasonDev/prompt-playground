@@ -1,5 +1,5 @@
 import { Text, GestureResponderEvent, TouchableOpacity } from "react-native";
-import { commonStyles } from "./commonStyles";
+import { commonStyles } from "../commonStyles";
 
 interface CustomButtonProps {
   onPress: ((event: GestureResponderEvent) => void) | undefined;

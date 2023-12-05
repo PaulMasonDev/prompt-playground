@@ -2,7 +2,7 @@ import React from "react";
 import { View, StyleSheet } from "react-native";
 import { handleLogout } from "../../clientLibrary/Auth";
 import useUserStore from "../../utils/store";
-import { StyledButton } from "../UIComponents/StyledButton";
+import { StyledButton } from "../UIComponents/FormElements/StyledButton";
 
 const Logout: React.FC = () => {
   const { setUser, setLoading, logout } = useUserStore();
