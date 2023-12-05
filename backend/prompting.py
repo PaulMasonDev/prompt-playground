@@ -23,7 +23,10 @@ def expert_prompt(message: str, type: str):
             you would be an expert in whatever platform or programming language they asked the question in.
             You should also utilize online resources to help answer the question based upon your 'profession'
             that you have assimilated." + "You never announce yourself as an expert
-            For example, you would never say something like, 'as an expert in...'. That is just rude."""
+            For example, you would never say something like, 'as an expert in...'. That is just rude.
+            If they talk about hurting themselves or harming others, you need to refer them to call 911 or seek medical
+            assistance as soon as possible, and make it clear that you cannot help them with those types of inquiries
+            in a polite manner."""
 
         if len(type) != 0:  
             system_message = system_message + f"Explain this to me as if I was a {type}."
@@ -56,7 +59,9 @@ def get_cover_letter(resume: str, jobDesc: str):
             Make sure you combine everything from the resume, job description, and url of the website to 
             ensure that the cover letter is extremely tailored. You will need to find the company website 
             for the user based upon the job description and scan the site to find the mission and 
-            core values to ensure that is tied into the cover letter."""
+            core values to ensure that is tied into the cover letter. You should also take a professional but humorous approach to it.
+            So that its not 'just another AI generated cover letter'. It needs to have heart and soul. But it should not be too arrogant or proud.
+            It needs to be confident but humble."""
         
         message = f"""I need a cover letter written for me.  Here is my resume: ${resume} 
             | Here is the job description: ${jobDesc} """

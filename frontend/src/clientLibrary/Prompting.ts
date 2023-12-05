@@ -17,7 +17,7 @@ export const getPromptResponse = async (prompt: string, type: string) => {
     return data;
   } catch (error) {
     console.error(error);
-    alert("Error, An error occurred during login.");
+    alert(`Error, An error occurred during login. ${error}`);
     return error;
   }
 };

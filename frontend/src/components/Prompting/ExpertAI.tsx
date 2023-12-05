@@ -11,6 +11,9 @@ import {
 import { getPromptResponse } from "../../clientLibrary/Prompting";
 import useUserStore from "../../utils/store";
 import Icon from "@expo/vector-icons/FontAwesome"; // Or any other icon set you prefer
+import { CustomTextInput } from "../UIComponents/CustomTextInput";
+import { CustomButton } from "../UIComponents/CustomButton";
+import { copyToClipboard } from "../../utils/clipboard.utils";
 
 export const ExpertAI = () => {
   const [prompt, setPrompt] = useState("");
@@ -23,7 +26,6 @@ export const ExpertAI = () => {
   const handlePress = async () => {
     setLoading(true);
     const apiResponse = await getPromptResponse(prompt, type);
-    console.log({ apiResponse });
     setResponseHeader(prompt);
     setResponse(apiResponse);
     setPrompt("");
@@ -31,21 +33,14 @@ export const ExpertAI = () => {
     setLoading(false);
   };
 
-  const copyToClipboard = (header: string, text: string) => {
-    Clipboard.setStringAsync(header + `\n` + text);
-    alert("Text copied to clipboard");
-  };
-
   const canSubmit = prompt;
 
   return (
     <View style={styles.container}>
-      <TextInput
-        style={styles.textInput}
+      <CustomTextInput
         value={prompt}
         onChangeText={setPrompt}
         placeholder="What do you want to know how to do?"
-        placeholderTextColor="#e0e0e0" // Light color for the placeholder text
       />
       {/* <TextInput
         style={styles.textInput}
@@ -54,22 +49,16 @@ export const ExpertAI = () => {
         placeholder="Who is the audience? Leave blank for standard"
         placeholderTextColor="#e0e0e0"
       /> */}
-      <TouchableOpacity
-        style={[styles.button, !canSubmit && styles.disabledButton]}
+      <CustomButton
+        title="Submit"
         onPress={handlePress}
         disabled={!canSubmit}
-      >
-        <Text
-          style={[styles.buttonText, !canSubmit && styles.disabledButtonText]}
-        >
-          Submit
-        </Text>
-      </TouchableOpacity>
+      />
       {response && (
         <View style={styles.copyContainer}>
           <TouchableOpacity
             style={styles.copyIcon}
-            onPress={() => copyToClipboard(responseHeader, response)}
+            onPress={() => copyToClipboard(responseHeader + `\n` + response)}
           >
             <Icon name="copy" size={20} color="#FFF" />
           </TouchableOpacity>
@@ -78,7 +67,7 @@ export const ExpertAI = () => {
 
       <ScrollView style={styles.responseTextContainer}>
         <TouchableOpacity
-          onLongPress={() => copyToClipboard(responseHeader, response)}
+          onLongPress={() => copyToClipboard(responseHeader + `\n` + response)}
         >
           {response && (
             <Text style={styles.responseHeader}>{responseHeader}</Text>
@@ -95,28 +84,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#1a1a2e", // Dark background for a techy feel
     padding: 20,
-  },
-  textInput: {
-    backgroundColor: "#16213e", // Slightly lighter shade for input fields
-    color: "#e0e0e0", // Light text for readability
-    borderRadius: 5,
-    padding: 10,
-    marginBottom: 10,
-    borderWidth: 1,
-    borderColor: "#0f3460", // Subtle border color
-  },
-  button: {
-    backgroundColor: "#0f3460", // Matching the theme's accent color
-    borderRadius: 5,
-    padding: 15,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 10,
-  },
-  buttonText: {
-    color: "#e0e0e0", // Light text on the button for contrast
-    fontSize: 16,
-    fontWeight: "bold",
   },
   copyContainer: {
     position: "relative",
@@ -141,19 +108,5 @@ const styles = StyleSheet.create({
     right: 10,
     padding: 5,
     // Additional styling if needed
-  },
-  disabledButton: {
-    backgroundColor: "#3a3a58", // A dimmer color for disabled state
-    borderRadius: 5,
-    padding: 15,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 10,
-    opacity: 0.5, // Lower opacity to visually indicate the button is disabled
-  },
-  disabledButtonText: {
-    color: "#b0b0b0", // A lighter color indicating the button is not active
-    fontSize: 16,
-    fontWeight: "bold",
   },
 });
