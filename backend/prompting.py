@@ -28,9 +28,6 @@ def expert_prompt(message: str):
             assistance as soon as possible, and make it clear that you cannot help them with those types of inquiries
             in a polite manner."""
 
-        if len(type) != 0:  
-            system_message = system_message + f"Explain this to me as if I was a {type}."
-
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             # TODO: Make the content property for the system into a db value that can be edited by an admin.
