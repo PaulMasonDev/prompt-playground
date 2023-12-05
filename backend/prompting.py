@@ -10,7 +10,7 @@ openai.api_key = SECRET_KEY
 
 router = APIRouter()
 
-@router.get("/")
+@router.get("/expert")
 def get_ai_response(message: str):
     return expert_prompt(message)
 
