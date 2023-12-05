@@ -1,14 +1,14 @@
 import { BACKEND_API } from "../constants";
 
-export const getPromptResponse = async (prompt: string, type: string) => {
+export const getPromptResponse = async (prompt: string) => {
   try {
-    const response = await fetch(
-      `${BACKEND_API}/prompting?message=${prompt}&type=${type}`,
-      {
-        method: "GET",
-        credentials: "include",
-      }
-    );
+    const response = await fetch(`${BACKEND_API}/prompting?message=${prompt}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      credentials: "include",
+    });
 
     const data = await response.json();
     return data;
@@ -39,7 +39,9 @@ export const getCoverLetterResponse = async (
     return data;
   } catch (error) {
     console.error(error);
-    alert("Error, An error occurred during login.");
+    alert(
+      `Error, An error occurred getting your cover letter. Error: ${error}`
+    );
     return error;
   }
 };

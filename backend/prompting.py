@@ -11,10 +11,10 @@ openai.api_key = SECRET_KEY
 router = APIRouter()
 
 @router.get("/")
-def get_ai_response(message: str, type: str):
-    return expert_prompt(message, type)
+def get_ai_response(message: str):
+    return expert_prompt(message)
 
-def expert_prompt(message: str, type: str):
+def expert_prompt(message: str):
     try:
         system_message = """You are to take the role of an expert based on the nature of the question.
             For example, if someone asks you what 2 plus 2 is, your role would be an expert mathmatician.
@@ -84,8 +84,8 @@ def get_cover_letter(resume: str, jobDesc: str):
         return None
 
 @router.get("/dumb")
-def get_dumb_ai_response(message: str, type: str):
-    return dumb_prompt(message, type)
+def get_dumb_ai_response(message: str):
+    return dumb_prompt(message)
 
     
 def dumb_prompt(message: str):

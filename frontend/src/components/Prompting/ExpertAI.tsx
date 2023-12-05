@@ -15,7 +15,7 @@ import { copyToClipboard } from "../../utils/clipboard.utils";
 
 export const ExpertAI = () => {
   const [prompt, setPrompt] = useState("");
-  const [type, setType] = useState("");
+  // const [type, setType] = useState("");
   const [response, setResponse] = useState("");
   const [responseHeader, setResponseHeader] = useState("");
 
@@ -23,11 +23,11 @@ export const ExpertAI = () => {
 
   const handlePress = async () => {
     setLoading(true);
-    const apiResponse = await getPromptResponse(prompt, type);
+    const apiResponse = await getPromptResponse(prompt);
     setResponseHeader(prompt);
     setResponse(apiResponse);
     setPrompt("");
-    setType("");
+    // setType("");
     setLoading(false);
   };
 
