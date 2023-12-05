@@ -7,7 +7,6 @@ export const getPromptResponse = async (prompt: string) => {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
-      credentials: "include",
     });
 
     const data = await response.json();
@@ -31,7 +30,6 @@ export const getCoverLetterResponse = async (
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
         },
-        credentials: "include",
       }
     );
 
