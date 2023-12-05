@@ -55,7 +55,7 @@ export const getUserInfo = async () => {
     return data;
   } catch (error) {
     console.error(error);
-    alert("Error, An error occurred during login.");
+    alert("Error, An error occurred getting your user info.");
     return error;
   }
 };
