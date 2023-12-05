@@ -8,15 +8,17 @@ interface User {
 interface UserStore {
   user: User | null;
   isLoading: boolean;
+  loadingMessage: string;
   isLoggedIn: boolean;
   setUser: (userData: User | null) => void;
-  setLoading: (value: boolean) => void;
+  setLoading: (value: boolean, message?: string) => void;
   logout: () => void;
 }
 
 const useUserStore = create<UserStore>((set) => ({
   user: {} as User,
   isLoading: false,
+  loadingMessage: "",
   isLoggedIn: false,
   recipes: [],
   setUser: (userData: User | null) => {
@@ -25,9 +27,10 @@ const useUserStore = create<UserStore>((set) => ({
       isLoggedIn: true,
     }));
   },
-  setLoading: (value: boolean) => {
+  setLoading: (value: boolean, message?: string) => {
     set(() => ({
       isLoading: value,
+      loadingMessage: message || "",
     }));
   },
   logout: () => {

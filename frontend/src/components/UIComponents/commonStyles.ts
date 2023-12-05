@@ -1,6 +1,11 @@
 import { StyleSheet } from "react-native";
 
 export const commonStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#1a1a2e", // Dark background for a techy feel
+    padding: 20,
+  },
   textInput: {
     backgroundColor: "#16213e", // Slightly lighter shade for input fields
     color: "#e0e0e0", // Light text for readability

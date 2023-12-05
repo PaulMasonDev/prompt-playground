@@ -1,5 +1,30 @@
 import { BACKEND_API } from "../constants";
 
+export interface FeedbackPayload {
+  prompt: string;
+  response: string;
+  rating: string;
+  type: string;
+}
+
+export const sendFeedback = async (feedback: FeedbackPayload) => {
+  try {
+    const response = await fetch(`${BACKEND_API}/feedback`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(feedback),
+    });
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(error);
+    alert(`Error, An error occurred sending your feedback. ${error}`);
+    return error;
+  }
+};
+
 export const getPromptResponse = async (prompt: string) => {
   try {
     const response = await fetch(

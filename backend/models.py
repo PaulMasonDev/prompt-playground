@@ -1,6 +1,7 @@
-from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy import Column, ForeignKey, Integer, String, DateTime
 from sqlalchemy.orm import relationship
 from database import Base
+from datetime import datetime
 
 class User(Base):
     __tablename__ = "users"
@@ -19,3 +20,14 @@ class Settings(Base):
     user_id = Column(Integer, ForeignKey("users.id"))
 
     owner = relationship("User", back_populates="settings")
+
+class Feedback(Base):
+    __tablename__ = "feedback"
+
+    id = Column(Integer, primary_key=True, index=True)
+    type = Column(String, index=True)
+    prompt = Column(String)
+    response = Column(String)
+    rating = Column(String)
+    created_at = Column(DateTime, default=datetime.utcnow)
+

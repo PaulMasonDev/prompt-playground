@@ -1,13 +1,13 @@
 import { NavigationContainer } from "@react-navigation/native";
 import React, { useEffect } from "react";
 import { SafeAreaView, StyleSheet } from "react-native";
-import BottomTabNavigator from "./src/components/BottomTabNavigator/BottomTabNavigator";
+import BottomTabNavigator from "./src/components/Navigation/BottomTabNavigator";
 import useUserStore from "./src/utils/store";
 // import { getUserInfo } from "./src/clientLibrary/Auth";
 import Loader from "./src/utils/Loader/Loader";
 
 function App() {
-  const { setUser, isLoading } = useUserStore();
+  const { setUser, isLoading, loadingMessage } = useUserStore();
   // useEffect(() => {
   //   const getUser = async () => {
   //     const data = await getUserInfo();
@@ -18,7 +18,7 @@ function App() {
 
   return (
     <>
-      <Loader isLoading={isLoading} />
+      <Loader isLoading={isLoading} message={loadingMessage} />
       <NavigationContainer>
         <SafeAreaView style={styles.container}>
           <BottomTabNavigator />

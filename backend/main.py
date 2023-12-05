@@ -3,16 +3,14 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from database import Base, engine
-from auth import router as auth_router  # Import the router from auth.py
+from auth import router as auth_router
 from prompting import router as prompting_router
-# import requests
-# import base64
+from feedback import router as feedback_router
 
 # Create an instance of the FastAPI application
 app = FastAPI()
 
 origins = [
-    # "https://buyerresist.github.io",  # Production frontend
     "http://localhost:19006",  # Local development frontend
 ]
 
@@ -27,7 +25,7 @@ app.add_middleware(
 # Include the authentication router
 app.include_router(auth_router, prefix="/auth", tags=["auth"])
 app.include_router(prompting_router, prefix="/prompting", tags=["prompting"])
-# app.include_router(pricing_router, prefix="/product", tags=["product"])
+app.include_router(feedback_router, prefix="/feedback", tags=["feedback"])
 
 
 # Function tshampooo create database tables

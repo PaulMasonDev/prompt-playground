@@ -1,5 +1,6 @@
-from typing import List
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+from datetime import datetime
+from typing import Optional
 
 # Settings Schemas
 class SettingsBase(BaseModel):
@@ -27,6 +28,20 @@ class User(UserBase):
     settings: Settings
     class Config:
         from_attributes = True
+
+# Feedback Schemas
+class FeedbackBase(BaseModel):
+    prompt: str
+    response: str
+    rating: str
+    type: str
+
+class FeedbackCreate(FeedbackBase):
+    pass
+
+class Feedback(FeedbackBase):
+    id: int
+    created_at: Optional[datetime] = Field(default_factory=datetime.utcnow)
 
 # Token Schemas
 class Token(BaseModel):

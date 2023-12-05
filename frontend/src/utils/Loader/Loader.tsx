@@ -1,7 +1,13 @@
 import React from "react";
 import { View, ActivityIndicator, StyleSheet, Modal, Text } from "react-native";
 
-const Spinner = ({ isLoading }: { isLoading: boolean }) => {
+const Spinner = ({
+  isLoading,
+  message,
+}: {
+  isLoading: boolean;
+  message: string;
+}) => {
   return (
     <Modal
       transparent={true}
@@ -11,10 +17,7 @@ const Spinner = ({ isLoading }: { isLoading: boolean }) => {
     >
       <View style={styles.overlay}>
         <ActivityIndicator size="large" color="#0000ff" />
-        <Text style={styles.message}>
-          Loading...This could take up to 30 seconds. Our robots are researching
-          your question and becoming an expert on the topic as we speak!
-        </Text>
+        {message && <Text style={styles.message}>{message}</Text>}
       </View>
     </Modal>
   );

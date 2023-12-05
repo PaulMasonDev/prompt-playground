@@ -6,6 +6,7 @@ interface CustomTextInputProps {
   onChangeText: ((text: string) => void) | undefined;
   placeholder: string;
   multiline?: boolean;
+  clearTextOnFocus?: boolean;
 }
 
 export const CustomTextInput = ({
@@ -13,6 +14,7 @@ export const CustomTextInput = ({
   onChangeText,
   placeholder,
   multiline,
+  clearTextOnFocus,
 }: CustomTextInputProps) => (
   <TextInput
     style={commonStyles.textInput}
@@ -21,5 +23,6 @@ export const CustomTextInput = ({
     placeholder={placeholder}
     placeholderTextColor="#e0e0e0"
     multiline={multiline}
+    clearTextOnFocus={clearTextOnFocus}
   />
 );
