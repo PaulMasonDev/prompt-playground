@@ -2,15 +2,12 @@ import { BACKEND_API } from "../constants";
 
 export const getPromptResponse = async (prompt: string) => {
   try {
-    const response = await fetch(
-      `https://prompt-playground-production.up.railway.app/prompting?message=${prompt}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-      }
-    );
+    const response = await fetch(`${BACKEND_API}/prompting?message=${prompt}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    });
 
     const data = await response.json();
     return data;
