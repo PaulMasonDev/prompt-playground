@@ -6,9 +6,6 @@ export const getPromptResponse = async (prompt: string, type: string) => {
       `${BACKEND_API}/prompting?message=${prompt}&type=${type}`,
       {
         method: "GET",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
         credentials: "include",
       }
     );
@@ -17,7 +14,7 @@ export const getPromptResponse = async (prompt: string, type: string) => {
     return data;
   } catch (error) {
     console.error(error);
-    alert(`Error, An error occurred during login. ${error}`);
+    alert(`Error, An error occurred getting an AI response. ${error}`);
     return error;
   }
 };

@@ -1,9 +1,7 @@
 import { useState } from "react";
-import * as Clipboard from "expo-clipboard";
 import {
   View,
   Text,
-  TextInput,
   StyleSheet,
   TouchableOpacity,
   ScrollView,
