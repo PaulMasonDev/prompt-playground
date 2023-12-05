@@ -9,7 +9,7 @@ export interface FeedbackPayload {
 
 export const sendFeedback = async (feedback: FeedbackPayload) => {
   try {
-    const response = await fetch(`${BACKEND_API}/feedback`, {
+    const response = await fetch(`${BACKEND_API}/feedback/general`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

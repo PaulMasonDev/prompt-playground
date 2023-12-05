@@ -12,7 +12,7 @@ class Feedback(BaseModel):
     rating: str
     type: str
 
-@router.post("/", response_model=schemas.Feedback)
+@router.post("/general", response_model=schemas.Feedback)
 def post_feedback(feedback: schemas.FeedbackCreate, db: Session = Depends(get_db)):
     print("Feedback: " + feedback.prompt)
     db_feedback = models.Feedback(
