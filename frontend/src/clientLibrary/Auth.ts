@@ -77,7 +77,9 @@ export const handleLogin = async ({ username, password }: HandleLoginProps) => {
     return { access_token: data.access_token || null, detail: data.detail };
   } catch (error) {
     console.error(error);
-    alert("Error, An error occurred during login.");
+    alert(
+      "Error, An error occurred during login. Please contact your administrator."
+    );
     return { access_token: null, detail: error };
   }
 };
