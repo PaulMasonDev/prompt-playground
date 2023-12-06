@@ -45,7 +45,6 @@ export const ExpertAI = () => {
         options={[
           { label: "English", value: "" },
           { label: "Spanish", value: "spanish" },
-          { label: "Italian", value: "italian" },
           { label: "Pirate", value: "pirate" },
           { label: "Fifth Grader", value: "5th grader" },
         ]}
