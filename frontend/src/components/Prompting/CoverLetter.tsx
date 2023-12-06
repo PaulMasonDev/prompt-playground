@@ -25,7 +25,7 @@ export const CoverLetter = () => {
   const handlePress = async () => {
     setLoading(
       true,
-      "Consulting my ATS bot friends...looking at the job description, looking at your resume...impressive! Just a little but longer and I'll have what you need for you!"
+      "Consulting my ATS bot friends...looking at the job description, looking at your resume...impressive! Just a little bit longer and I'll have what you need for you!"
     );
     const apiCall =
       type === "cover" ? getCoverLetterResponse : getResumeFeedback;
