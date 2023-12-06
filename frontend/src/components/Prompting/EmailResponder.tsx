@@ -2,7 +2,7 @@ import { useState } from "react";
 import { View } from "react-native";
 import {
   getCoverLetterResponse,
-  getResumeFeedback,
+  getEmailResponse,
 } from "../../clientLibrary/Prompting";
 import useUserStore from "../../utils/store";
 import { CustomTextInput } from "../UIComponents/FormElements/CustomTextInput";
@@ -10,12 +10,10 @@ import { CustomButton } from "../UIComponents/FormElements/CustomButton";
 import ResultsHeader from "../UIComponents/ResultsHeader";
 import ResponseTextContainer from "../UIComponents/ResponseTextContainer";
 import { commonStyles } from "../UIComponents/commonStyles";
-import { RadioGroup } from "../UIComponents/FormElements/RadioOptions";
 
-export const CoverLetter = () => {
-  const [resume, setResume] = useState("");
-  const [jobDesc, setJobDesc] = useState("");
-  const [type, setType] = useState("cover");
+export const EmailResponder = () => {
+  const [originalEmail, setOriginalEmail] = useState("");
+  const [goal, setGoal] = useState("");
   const [response, setResponse] = useState("");
 
   const { setLoading } = useUserStore();
@@ -25,39 +23,29 @@ export const CoverLetter = () => {
   const handlePress = async () => {
     setLoading(
       true,
-      "Consulting my ATS bot friends...looking at the job description, looking at your resume...impressive! Just a little but longer and I'll have what you need for you!"
+      "Brushing up on my etiquette skills!...Crafting that email for you!...Let's set you up for success!"
     );
-    const apiCall =
-      type === "cover" ? getCoverLetterResponse : getResumeFeedback;
-    const apiResponse = await apiCall(resume, jobDesc);
+    const apiResponse = await getEmailResponse(originalEmail, goal);
     setResponse(apiResponse);
     setLoading(false, "");
   };
 
-  const canSubmit = resume && jobDesc;
+  const canSubmit = originalEmail;
 
   return (
     <View style={commonStyles.container}>
       <CustomTextInput
-        value={jobDesc}
-        onChangeText={setJobDesc}
-        placeholder="Paste Job Description"
+        value={originalEmail}
+        onChangeText={setOriginalEmail}
+        placeholder="Paste Original Email"
         multiline
         clearTextOnFocus
       />
       <CustomTextInput
-        value={resume}
-        onChangeText={setResume}
-        placeholder="Paste Resume"
-        multiline
+        value={goal}
+        onChangeText={setGoal}
+        placeholder="(Optional) Why are you creating this email?"
         clearTextOnFocus
-      />
-      <RadioGroup
-        options={[
-          { label: "Write Cover Letter", value: "cover" },
-          { label: "Resume Feedback", value: "resume" },
-        ]}
-        setExternalValue={setType}
       />
       <CustomButton
         title="Submit"
@@ -66,9 +54,9 @@ export const CoverLetter = () => {
       />
       {response && (
         <ResultsHeader
-          prompt={`Resume: ${resume} \n Job Description: ${jobDesc}`}
+          prompt={`Original Email: ${originalEmail} \n Goal: ${goal}`}
           response={response}
-          type={type}
+          type="email"
           feedbackSubmitted={feedbackSubmitted}
           setFeedbackSubmitted={setFeedbackSubmitted}
         />

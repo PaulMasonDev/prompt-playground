@@ -6,21 +6,31 @@ import { ExpertAI } from "../Prompting/ExpertAI";
 import { CoverLetter } from "../Prompting/CoverLetter";
 import Icon from "@expo/vector-icons/FontAwesome";
 import { bottomTabStyles } from "./bottomTabStyles";
+import { EmailResponder } from "../Prompting/EmailResponder";
 
 const Tab = createBottomTabNavigator();
+
+enum AIRoute {
+  Auth = "Auth",
+  ExpertAI = "ExpertAI",
+  CoverLetter = "Cover Letter",
+  EmailResponder = "Email Responder",
+}
 
 function BottomTabNavigator() {
   return (
     <Tab.Navigator
-      initialRouteName="ExpertAI"
+      initialRouteName={AIRoute.EmailResponder}
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color, size }) => {
           let iconName: any;
 
-          if (route.name === "ExpertAI") {
+          if (route.name === AIRoute.ExpertAI) {
             iconName = "flask";
-          } else if (route.name === "Cover Letter") {
+          } else if (route.name === AIRoute.CoverLetter) {
             iconName = "file-text";
+          } else if (route.name === AIRoute.EmailResponder) {
+            iconName = "reply";
           }
 
           // You can return any component that you like here!
@@ -38,14 +48,19 @@ function BottomTabNavigator() {
         options={{ tabBarAccessibilityLabel: "Auth" }}
       /> */}
       <Tab.Screen
-        name="ExpertAI"
+        name={AIRoute.ExpertAI}
         component={ExpertAI}
-        options={{ tabBarAccessibilityLabel: "ExpertAI" }}
+        options={{ tabBarAccessibilityLabel: AIRoute.ExpertAI }}
       />
       <Tab.Screen
-        name="Cover Letter"
+        name={AIRoute.CoverLetter}
         component={CoverLetter}
-        options={{ tabBarAccessibilityLabel: "CoverLetter" }}
+        options={{ tabBarAccessibilityLabel: AIRoute.CoverLetter }}
+      />
+      <Tab.Screen
+        name={AIRoute.EmailResponder}
+        component={EmailResponder}
+        options={{ tabBarAccessibilityLabel: AIRoute.EmailResponder }}
       />
     </Tab.Navigator>
   );

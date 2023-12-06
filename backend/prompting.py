@@ -83,6 +83,68 @@ def get_cover_letter(resume: str, jobDesc: str):
         print('ERROR:', e)
         return None
 
+    #   `${BACKEND_API}/prompting/resume?resume=${resume}&jobDesc=${jobDesc}`,
+@router.get("/resume")
+def get_resume_feedback_response(resume: str, jobDesc: str):
+    return get_resume_feedback(resume, jobDesc)
+
+def get_resume_feedback(resume: str, jobDesc: str):
+    try:
+        system_message = """You are an expert resume writer.  You have a very sharp eye for locating what the user currently
+            has in their resume and tying it to what's in the job description. You do this masterfully.  You also make sure that
+            it is not making anything up along the way, but tied specifically to the user's background based on their resume."""
+        
+        message = f"""I need some feedback on how I can beef up my resume based on the job description.  Here is my resume: ${resume} 
+            | Here is the job description: ${jobDesc} """
+        
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": system_message
+                },
+                {"role": "user", "content": f"{message}"}
+            ],
+            temperature=0.7,
+            max_tokens=1000,
+            stop=[");"]
+        )
+        return response.choices[0].message['content']
+    except Exception as e:
+        print('ERROR:', e)
+        return None
+
+@router.get("/email")
+def get_email_response(original: str, goal: str):
+    return get_email_response(original, goal)
+
+def get_email_response(original: str, goal: str):
+    try:
+        system_message = """You are an expert in all things email.  You know the right etiquette to use.
+            you know the best techniques to use to get responses from people. (All ethical techniques). The user will
+            be presenting you with an email they need a response to. And your job is to come up with an email that will help them respond
+            and help them with a specific goal if they include it. While you can't predict the future,
+            try to do everything you can to ensure that the user can get the best outcome from the e-mail response you create."""
+        
+        message = f"""I need an email response to an email I received: {original}."""
+        if len(goal) > 0:
+            message = message + f"I also want to be sure that it achieves this purpose: {goal}"
+        
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": system_message
+                },
+                {"role": "user", "content": f"{message}"}
+            ],
+            temperature=0.7,
+            max_tokens=1000,
+            stop=[");"]
+        )
+        return response.choices[0].message['content']
+    except Exception as e:
+        print('ERROR:', e)
+        return None
+    
 @router.get("/dumb")
 def get_dumb_ai_response(message: str):
     return dumb_prompt(message)

@@ -71,3 +71,47 @@ export const getCoverLetterResponse = async (
     return error;
   }
 };
+
+export const getResumeFeedback = async (resume: string, jobDesc: string) => {
+  try {
+    const response = await fetch(
+      `${BACKEND_API}/prompting/resume?resume=${resume}&jobDesc=${jobDesc}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    );
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(error);
+    alert(
+      `Error, An error occurred getting your resume feedback. Error: ${error}`
+    );
+    return error;
+  }
+};
+
+export const getEmailResponse = async (original: string, goal: string) => {
+  try {
+    const response = await fetch(
+      `${BACKEND_API}/prompting/email?original=${original}&goal=${goal}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    );
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(error);
+    alert(`Error, An error occurred getting your e-mail response. ${error}`);
+    return error;
+  }
+};
