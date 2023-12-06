@@ -20,7 +20,7 @@ export const CoverLetter = () => {
   const handlePress = async () => {
     setLoading(
       true,
-      "Consulting my ATS bot friends...looking at the job description, looking at your resume...impressive! Just a little but longer and I'll have your cover letter for you!"
+      "Consulting my ATS bot friends...looking at the job description, looking at your resume...impressive! Just a little bit longer and I'll have your cover letter for you!"
     );
     const apiResponse = await getCoverLetterResponse(resume, jobDesc);
     setResponse(apiResponse);
