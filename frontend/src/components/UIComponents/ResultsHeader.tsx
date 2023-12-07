@@ -11,6 +11,7 @@ interface ResultsHeaderProps {
   type: string;
   feedbackSubmitted: boolean;
   setFeedbackSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
+  feedbackOff: boolean;
 }
 
 const ResultsHeader = ({
@@ -19,6 +20,7 @@ const ResultsHeader = ({
   type,
   feedbackSubmitted,
   setFeedbackSubmitted,
+  feedbackOff,
 }: ResultsHeaderProps) => {
   const { wobbleStyle } = useCommonAnims();
 
@@ -30,13 +32,15 @@ const ResultsHeader = ({
         </TouchableOpacity>
       </Animated.View>
 
-      <Feedback
-        prompt={prompt}
-        response={response}
-        type={type}
-        feedbackSubmitted={feedbackSubmitted}
-        setFeedbackSubmitted={setFeedbackSubmitted}
-      />
+      {!feedbackOff && (
+        <Feedback
+          prompt={prompt}
+          response={response}
+          type={type}
+          feedbackSubmitted={feedbackSubmitted}
+          setFeedbackSubmitted={setFeedbackSubmitted}
+        />
+      )}
     </View>
   );
 };

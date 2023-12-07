@@ -1,8 +1,12 @@
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from prompt_logging import log_prompt_to_db
 from sqlalchemy.orm import Session
 from auth import get_db
+from PyPDF2 import PdfReader
+import io
+import base64
+from pydantic import BaseModel
 
 router = APIRouter()
 
@@ -27,9 +31,35 @@ def expert_prompt(message: str, type: str, db: Session):
     
     return server_response
     
-@router.get("/cover")
-def get_cover_letter_response(resume: str, jobDesc: str, isCasual: str, isHumorous: str, isConcise: str, db: Session = Depends(get_db)):
-    return get_cover_letter(resume, jobDesc, isCasual, isHumorous, isConcise, db)
+class CoverLetterRequest(BaseModel):
+    resume: str
+    jobDesc: str
+    isCasual: bool
+    isHumorous: bool
+    isConcise: bool
+
+@router.post("/cover")
+async def get_cover_letter_response(
+    request: CoverLetterRequest,
+    db: Session = Depends(get_db)
+):
+    # Decode the base64-encoded resume
+    try:
+        resume_content = base64.b64decode(request.resume)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Invalid resume data: {e}")
+
+    # Process the resume content (assuming it's a PDF)
+    try:
+        reader = PdfReader(io.BytesIO(resume_content))
+        text = ""
+        for page in reader.pages:
+            text += page.extract_text() + "\n"
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Error processing resume PDF: {e}")
+
+    # Call your function to generate the cover letter
+    return get_cover_letter(text, request.jobDesc, request.isCasual, request.isHumorous, request.isConcise, db)
 
 def get_cover_letter(resume: str, jobDesc: str, isCasual: str, isHumorous: str, isConcise: str, db: Session):
     system_message = """You are an expert resume writer, top recruiter, expert hiring manager, 
@@ -131,37 +161,3 @@ def get_email_response(original: str, goal: str, db: Session):
     
     server_response = log_prompt_to_db(system_message, message, "email", db)
     return server_response
-        
-    
-# def log_prompt_to_db(system_message: str, user_message: str, prompt_type: str, db: Session, max_tokens=1000):
-#     response_time = 0.0
-#     server_response = ""
-#     try:
-#         start_time = datetime.datetime.now()
-#         response = openai.ChatCompletion.create(
-#             model="gpt-3.5-turbo",
-#             messages=[
-#                 {"role": "system", "content": system_message
-#                 },
-#                 {"role": "user", "content": f"{user_message}"}
-#             ],
-#             temperature=0.7,
-#             max_tokens=max_tokens,
-#         )
-#         end_time = datetime.datetime.now()
-#         response_time = (end_time - start_time).total_seconds()
-#         server_response = response.choices[0].message['content']
-#     except Exception as e:
-#         print('ERROR:', e)
-#         return None
-    
-#     db_prompt = models.Prompt(
-#         prompt=user_message,
-#         response=server_response,
-#         prompt_type=prompt_type,
-#         elapsed_time=response_time
-#     )
-#     db.add(db_prompt)
-#     db.commit()
-#     db.refresh(db_prompt)
-#     return server_response

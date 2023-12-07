@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { View } from "react-native";
 import {
   getCoverLetterResponse,
@@ -29,6 +29,19 @@ export const CareerCraftAI = () => {
   const { setLoading } = useUserStore();
 
   const [feedbackSubmitted, setFeedbackSubmitted] = useState(false);
+
+  const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const base64String = e.target?.result as string;
+        console.log(base64String.split(",")[1]);
+        setResume(base64String.split(",")[1]); // Split to remove the data URL part
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handlePress = async () => {
     setLoading(
@@ -76,18 +89,28 @@ export const CareerCraftAI = () => {
         multiline
         clearTextOnFocus
       />
-      <CustomTextInput
+      {/* <CustomTextInput
         value={resume}
         onChangeText={setResume}
         placeholder="Paste Resume"
         multiline
         clearTextOnFocus
-      />
+      /> */}
+      <label style={{ color: "white", fontFamily: "Arial", marginRight: 5 }}>
+        Upload Resume
+        <input
+          type="file"
+          accept="application/pdf"
+          onChange={handleFileUpload}
+          style={{ margin: "10px 0", color: "white" }} // You can adjust the style as needed
+        />
+      </label>
+
       <RadioGroup
         options={[
           { label: "Write Cover Letter", value: "cover" },
-          { label: "Resume Feedback", value: "resume" },
-          { label: "Resume Rewrite", value: "rewrite" },
+          // { label: "Resume Feedback", value: "resume" }, // TODO: Turn these back on after migrating endpoints to POST requests
+          // { label: "Resume Rewrite", value: "rewrite" },
         ]}
         setExternalValue={setType}
       />
@@ -131,6 +154,7 @@ export const CareerCraftAI = () => {
           type={type}
           feedbackSubmitted={feedbackSubmitted}
           setFeedbackSubmitted={setFeedbackSubmitted}
+          feedbackOff={true} // TODO: Turn feedback on after debugged it
         />
       )}
       <ResponseTextContainer

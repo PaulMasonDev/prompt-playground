@@ -54,19 +54,19 @@ export const getCoverLetterResponse = async (
   isConcise: boolean
 ) => {
   try {
-    const response = await fetch(
-      `${BACKEND_API}/prompting/cover?resume=${resume}&jobDesc=${jobDesc}&isCasual=${
-        isCasual ? "true" : ""
-      }&isHumorous=${isHumorous ? "true" : ""}&isConcise=${
-        isConcise ? "true" : ""
-      }`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-      }
-    );
+    const response = await fetch(`${BACKEND_API}/prompting/cover`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        resume,
+        jobDesc,
+        isCasual,
+        isHumorous,
+        isConcise,
+      }),
+    });
 
     const data = await response.json();
     return data;
