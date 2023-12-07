@@ -20,13 +20,16 @@ export const ExpertAI = () => {
   const [feedbackSubmitted, setFeedbackSubmitted] = useState(false);
 
   const handlePress = async () => {
+    setResponseHeader("");
+    setResponse("");
     setFeedbackSubmitted(false);
     setLoading(
       true,
       "Loading...This could take up to 30 seconds. Our robots are researching your question and becoming an expert on the topic as we speak!"
     );
     const apiResponse = await getPromptResponse(prompt, type);
-    setResponseHeader(prompt);
+    const headerType = type ? ` (${type})` : "";
+    setResponseHeader(`${prompt}${headerType}`);
     setResponse(apiResponse);
     setLoading(false, "");
   };
@@ -44,9 +47,9 @@ export const ExpertAI = () => {
       <RadioGroup
         options={[
           { label: "English", value: "" },
-          { label: "Spanish", value: "spanish" },
-          { label: "Pirate", value: "pirate" },
-          { label: "Fifth Grader", value: "5th grader" },
+          { label: "Spanish", value: "Spanish Language" },
+          { label: "Pirate", value: "Pirate" },
+          { label: "Fifth Grader", value: "5th Grade Teacher" },
         ]}
         setExternalValue={setType}
       />

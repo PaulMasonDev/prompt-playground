@@ -1,7 +1,8 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Animated } from "react-native";
 import Icon from "@expo/vector-icons/FontAwesome";
 import { FeedbackPayload, sendFeedback } from "../../clientLibrary/Prompting";
 import useUserStore from "../../utils/store";
+import { useCommonAnims } from "./useCommonAnims";
 
 export const Feedback = ({
   feedbackSubmitted,
@@ -12,14 +13,18 @@ export const Feedback = ({
   setFeedbackSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const { setLoading } = useUserStore();
+
+  const { fadeStyle } = useCommonAnims();
+
   const handlePress = async (rating: string) => {
     setLoading(true);
     await sendFeedback({ ...props, rating });
     setFeedbackSubmitted(true);
     setLoading(false);
   };
+
   return !feedbackSubmitted ? (
-    <View style={[styles.container]}>
+    <Animated.View style={[styles.container, fadeStyle]}>
       <Text style={[styles.feedbackPrompting]}>How did I do?</Text>
       <View style={[styles.thumbs]}>
         <Icon
@@ -36,7 +41,7 @@ export const Feedback = ({
           onPress={() => handlePress("negative")}
         />
       </View>
-    </View>
+    </Animated.View>
   ) : (
     <Text style={[styles.feedbackPrompting]}>Thank you for your feedback!</Text>
   );
@@ -55,7 +60,9 @@ const styles = StyleSheet.create({
   },
   feedbackPrompting: {
     color: "white",
-    fontSize: 16,
+    fontWeight: "bold",
+    fontSize: 20,
     padding: 5,
+    marginRight: 10,
   },
 });

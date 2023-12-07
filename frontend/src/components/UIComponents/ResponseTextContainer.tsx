@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
   responseTextContainer: {
     flex: 1, // Takes the remaining space of the screen
     marginTop: 10,
+    paddingLeft: 4,
   },
   responseHeader: {
     color: "#e0e0e0",

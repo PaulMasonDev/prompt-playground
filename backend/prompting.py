@@ -29,7 +29,7 @@ def expert_prompt(message: str, type: str):
             in a polite manner."""
 
         if len(type) > 0:
-            system_message = system_message + f"You should respond as though you are a {type}. If that doesn't make sense, and its possibly a language, then you should response in the language of {type}"
+            system_message = system_message + f"You should respond as though you are a {type}. If that doesn't make sense, and 'language' is in the type, then you should respond in the language of {type}"
 
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
