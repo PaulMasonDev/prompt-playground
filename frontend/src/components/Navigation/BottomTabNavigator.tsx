@@ -20,7 +20,7 @@ enum AIRoute {
 function BottomTabNavigator() {
   return (
     <Tab.Navigator
-      initialRouteName={AIRoute.CareerCraftAI}
+      initialRouteName={AIRoute.ExpertAI}
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color, size }) => {
           let iconName: any;
