@@ -43,7 +43,7 @@ export const EmailResponder = () => {
       <CustomTextInput
         value={goal}
         onChangeText={setGoal}
-        placeholder="(Optional) What outcome is desired after you send email?"
+        placeholder="(Optional) What should this email accomplish?"
         clearTextOnFocus
       />
       <CustomButton

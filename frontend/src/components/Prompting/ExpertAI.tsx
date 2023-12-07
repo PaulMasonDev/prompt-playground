@@ -42,7 +42,7 @@ export const ExpertAI = () => {
       <CustomTextInput
         value={prompt}
         onChangeText={setPrompt}
-        placeholder="What do you want to know how to do?"
+        placeholder="What do you need assistance with?"
         clearTextOnFocus
       />
       <RadioGroup

@@ -13,14 +13,10 @@ const ResponseTextContainer = ({
 }: ResponseTextContainerProps) => {
   return (
     <ScrollView style={styles.responseTextContainer}>
-      <TouchableOpacity
-        onLongPress={() => copyToClipboard(responseHeader + `\n` + response)}
-      >
-        {responseHeader && (
-          <Text style={styles.responseHeader}>{responseHeader}</Text>
-        )}
-        <Text style={styles.responseText}>{response}</Text>
-      </TouchableOpacity>
+      {responseHeader && (
+        <Text style={styles.responseHeader}>{responseHeader}</Text>
+      )}
+      <Text style={styles.responseText}>{response}</Text>
     </ScrollView>
   );
 };
