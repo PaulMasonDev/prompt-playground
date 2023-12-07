@@ -9,7 +9,9 @@ interface RadioButtonProps {
 }
 const RadioButton = ({ label, value, checked, onPress }: RadioButtonProps) => (
   <TouchableOpacity onPress={() => onPress(value)}>
-    <View style={{ flexDirection: "row", alignItems: "center" }}>
+    <View
+      style={{ flexDirection: "row", alignItems: "center", marginBottom: 5 }}
+    >
       <View
         style={{
           height: 20,
@@ -56,7 +58,7 @@ export const RadioGroup = ({ options, setExternalValue }: RadioGroupProps) => {
   };
 
   return (
-    <View style={{ flexDirection: "row" }}>
+    <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
       {options.map((option) => (
         <RadioButton
           key={option.value}

@@ -3,31 +3,31 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 // import Auth from "../Auth/Auth";
 import { ExpertAI } from "../Prompting/ExpertAI";
-import { CoverLetter } from "../Prompting/CoverLetter";
 import Icon from "@expo/vector-icons/FontAwesome";
 import { bottomTabStyles } from "./bottomTabStyles";
 import { EmailResponder } from "../Prompting/EmailResponder";
+import { CareerCraftAI } from "../Prompting/CareerCraftAI";
 
 const Tab = createBottomTabNavigator();
 
 enum AIRoute {
   Auth = "Auth",
   ExpertAI = "ExpertAI",
-  CoverLetter = "Cover Letter",
+  CareerCraftAI = "CareerCraftAI",
   EmailResponder = "Email Responder",
 }
 
 function BottomTabNavigator() {
   return (
     <Tab.Navigator
-      initialRouteName={AIRoute.CoverLetter}
+      initialRouteName={AIRoute.CareerCraftAI}
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color, size }) => {
           let iconName: any;
 
           if (route.name === AIRoute.ExpertAI) {
             iconName = "flask";
-          } else if (route.name === AIRoute.CoverLetter) {
+          } else if (route.name === AIRoute.CareerCraftAI) {
             iconName = "file-text";
           } else if (route.name === AIRoute.EmailResponder) {
             iconName = "reply";
@@ -53,9 +53,9 @@ function BottomTabNavigator() {
         options={{ tabBarAccessibilityLabel: AIRoute.ExpertAI }}
       />
       <Tab.Screen
-        name={AIRoute.CoverLetter}
-        component={CoverLetter}
-        options={{ tabBarAccessibilityLabel: AIRoute.CoverLetter }}
+        name={AIRoute.CareerCraftAI}
+        component={CareerCraftAI}
+        options={{ tabBarAccessibilityLabel: AIRoute.CareerCraftAI }}
       />
       <Tab.Screen
         name={AIRoute.EmailResponder}

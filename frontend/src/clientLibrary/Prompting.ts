@@ -102,6 +102,29 @@ export const getResumeFeedback = async (resume: string, jobDesc: string) => {
   }
 };
 
+export const getResumeRewrite = async (resume: string, jobDesc: string) => {
+  try {
+    const response = await fetch(
+      `${BACKEND_API}/prompting/rewrite?resume=${resume}&jobDesc=${jobDesc}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    );
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(error);
+    alert(
+      `Error, An error occurred getting your resume rewrite. Error: ${error}`
+    );
+    return error;
+  }
+};
+
 export const getEmailResponse = async (original: string, goal: string) => {
   try {
     const response = await fetch(

@@ -3,18 +3,18 @@ import { View } from "react-native";
 import {
   getCoverLetterResponse,
   getResumeFeedback,
+  getResumeRewrite,
 } from "../../clientLibrary/Prompting";
 import useUserStore from "../../utils/store";
 import { CustomTextInput } from "../UIComponents/FormElements/CustomTextInput";
 import { CustomButton } from "../UIComponents/FormElements/CustomButton";
 import ResultsHeader from "../UIComponents/ResultsHeader";
 import ResponseTextContainer from "../UIComponents/ResponseTextContainer";
-import { commonStyles } from "../UIComponents/commonStyles";
 import { RadioGroup } from "../UIComponents/FormElements/RadioOptions";
 import { CustomCheckbox } from "../UIComponents/FormElements/CustomCheckbox";
 import { CommonLayout } from "../UIComponents/CommonLayout";
 
-export const CoverLetter = () => {
+export const CareerCraftAI = () => {
   const [resume, setResume] = useState("");
   const [jobDesc, setJobDesc] = useState("");
   const [isCasual, setIsCasual] = useState(false);
@@ -47,7 +47,9 @@ export const CoverLetter = () => {
             isHumorous,
             isConcise
           )
-        : getResumeFeedback(resume, jobDesc);
+        : type === "resume"
+        ? getResumeFeedback(resume, jobDesc)
+        : getResumeRewrite(resume, jobDesc);
     const apiResponse = await apiCall;
     setResponse(apiResponse);
     const responseHeaderText = `${
@@ -55,7 +57,7 @@ export const CoverLetter = () => {
         ? "Cover Letter"
         : type === "resume"
         ? "Resume Feedback"
-        : ""
+        : "Resume Rewrite"
     }${isCasual ? " | Casual" : ""}${isHumorous ? " | Humorous" : ""}${
       isConcise ? " | Concise" : ""
     }`;
@@ -85,6 +87,7 @@ export const CoverLetter = () => {
         options={[
           { label: "Write Cover Letter", value: "cover" },
           { label: "Resume Feedback", value: "resume" },
+          { label: "Resume Rewrite", value: "rewrite" },
         ]}
         setExternalValue={setType}
       />

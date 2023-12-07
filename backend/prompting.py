@@ -41,7 +41,6 @@ def expert_prompt(message: str, type: str):
             ],
             temperature=0.7,
             max_tokens=500,
-            stop=[");"]
         )
         return response.choices[0].message['content']
     except Exception as e:
@@ -100,14 +99,12 @@ def get_cover_letter(resume: str, jobDesc: str, isCasual: str, isHumorous: str, 
             ],
             temperature=0.7,
             max_tokens=1000,
-            stop=[");"]
         )
         return response.choices[0].message['content']
     except Exception as e:
         print('ERROR:', e)
         return None
 
-    #   `${BACKEND_API}/prompting/resume?resume=${resume}&jobDesc=${jobDesc}`,
 @router.get("/resume")
 def get_resume_feedback_response(resume: str, jobDesc: str):
     return get_resume_feedback(resume, jobDesc)
@@ -130,12 +127,51 @@ def get_resume_feedback(resume: str, jobDesc: str):
             ],
             temperature=0.7,
             max_tokens=1000,
-            stop=[");"]
         )
         return response.choices[0].message['content']
     except Exception as e:
         print('ERROR:', e)
         return None
+    
+@router.get("/rewrite")
+def get_resume_rewrite_response(resume: str, jobDesc: str):
+    return get_resume_rewrite(resume, jobDesc)
+
+def get_resume_rewrite(resume: str, jobDesc: str):
+    try:
+        system_message = """You are an expert resume writer.  You have a very sharp eye for locating
+            what the user currently has in their resume and tying it to what's in the job description.
+            You do this masterfully.  You also make sure that it is not making anything up along the way,
+            but tied specifically to the user's background based on their resume. Rather than give suggestions,
+            you will rewrite the resume trying to keep the format as best as possible. If there are bullet
+            points at all, you should be able to replicate those with some sort of emoji or unicode character.
+            You DO NOT need to include the job description in your response. At the end of your rewrite,
+            talk about the specific changes you made and why (you don't need to talk about formatting changes at all,
+            just content). You may need to do a check between the original resume and the rewrite to ensure
+            you don't falsely claim a change that it was your change and not the original. 
+            Make sure your new resume you give back is the rewrite and not
+            the original resume. Add a disclaimer at the end that states that they should be sure
+            to proof the rewrite for accuracy to their actual skill set before sending it to any
+            prospective employers"""
+        
+        message = f"""I need rewrite on my resume based on the job description.  Here is my resume: ${resume} 
+            | Here is the job description: ${jobDesc} """
+        
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": system_message
+                },
+                {"role": "user", "content": f"{message}"}
+            ],
+            temperature=0.7,
+            max_tokens=1000,
+        )
+        return response.choices[0].message['content']
+    except Exception as e:
+        print('ERROR:', e)
+        return None
+
 
 @router.get("/email")
 def get_email_response(original: str, goal: str):
@@ -162,7 +198,6 @@ def get_email_response(original: str, goal: str):
             ],
             temperature=0.7,
             max_tokens=1000,
-            stop=[");"]
         )
         return response.choices[0].message['content']
     except Exception as e:
@@ -186,7 +221,6 @@ def dumb_prompt(message: str):
             top_p=1,
             frequency_penalty=0.8,
             presence_penalty=1.21,
-            stop=[");"]
         )
         return response.choices[0].message['content']
     except Exception as e:
