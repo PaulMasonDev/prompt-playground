@@ -1,15 +1,11 @@
 import { useState } from "react";
-import { View } from "react-native";
-import {
-  getCoverLetterResponse,
-  getEmailResponse,
-} from "../../clientLibrary/Prompting";
+import { getEmailResponse } from "../../clientLibrary/Prompting";
 import useUserStore from "../../utils/store";
 import { CustomTextInput } from "../UIComponents/FormElements/CustomTextInput";
 import { CustomButton } from "../UIComponents/FormElements/CustomButton";
 import ResultsHeader from "../UIComponents/ResultsHeader";
 import ResponseTextContainer from "../UIComponents/ResponseTextContainer";
-import { commonStyles } from "../UIComponents/commonStyles";
+import { CommonLayout } from "../UIComponents/CommonLayout";
 
 export const EmailResponder = () => {
   const [originalEmail, setOriginalEmail] = useState("");
@@ -25,6 +21,9 @@ export const EmailResponder = () => {
       true,
       "Brushing up on my etiquette skills!...Crafting that email for you!...Let's set you up for success!"
     );
+    setOriginalEmail("");
+    setResponse("");
+    setFeedbackSubmitted(false);
     const apiResponse = await getEmailResponse(originalEmail, goal);
     setResponse(apiResponse);
     setLoading(false, "");
@@ -32,8 +31,8 @@ export const EmailResponder = () => {
 
   const canSubmit = originalEmail;
 
-  return (
-    <View style={commonStyles.container}>
+  const inputSection = (
+    <>
       <CustomTextInput
         value={originalEmail}
         onChangeText={setOriginalEmail}
@@ -52,6 +51,11 @@ export const EmailResponder = () => {
         onPress={handlePress}
         disabled={!canSubmit}
       />
+    </>
+  );
+
+  const outputSection = (
+    <>
       {response && (
         <ResultsHeader
           prompt={`Original Email: ${originalEmail} \n Goal: ${goal}`}
@@ -62,6 +66,10 @@ export const EmailResponder = () => {
         />
       )}
       <ResponseTextContainer response={response} responseHeader={""} />
-    </View>
+    </>
+  );
+
+  return (
+    <CommonLayout inputSection={inputSection} outputSection={outputSection} />
   );
 };

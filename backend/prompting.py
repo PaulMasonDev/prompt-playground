@@ -49,10 +49,10 @@ def expert_prompt(message: str, type: str):
         return None
     
 @router.get("/cover")
-def get_cover_letter_response(resume: str, jobDesc: str):
-    return get_cover_letter(resume, jobDesc)
+def get_cover_letter_response(resume: str, jobDesc: str, isCasual: str, isHumorous: str, isConcise: str):
+    return get_cover_letter(resume, jobDesc, isCasual, isHumorous, isConcise)
 
-def get_cover_letter(resume: str, jobDesc: str):
+def get_cover_letter(resume: str, jobDesc: str, isCasual: str, isHumorous: str, isConcise: str):
     try:
         system_message = """You are an expert resume writer, top recruiter, expert hiring manager, 
             and expert cover letter writer. You are also have a very good sense of style when it comes to writing.
@@ -61,11 +61,35 @@ def get_cover_letter(resume: str, jobDesc: str):
             for the user based upon the job description and scan the site to find the mission and 
             core values to ensure that is tied into the cover letter. You should also take a professional but humorous approach to it.
             So that its not 'just another AI generated cover letter'. It needs to have heart and soul. But it should not be too arrogant or proud.
-            It needs to be confident but humble."""
+            It needs to be confident but humble.
+            Also, prepend to your AI response the following: 'Word Count:<word count>',
+            where 'word count' is the amount of words in the cover letter."""
         
         message = f"""I need a cover letter written for me.  Here is my resume: ${resume} 
             | Here is the job description: ${jobDesc} """
-            # | and here is the url to the website for the company: ${url}"""
+        
+        if isCasual == "true":
+            message = message + "I also need this to be in a casual yet professional tone."
+
+        if isHumorous == "true":
+            message = message + "I also need this to use a sense of humor tied to the companies brand."
+
+        if isConcise == "true":
+            message = message + """I also need this to be a concise cover letter.
+                Something that is easily digestible and not too wordy.
+                It should be no more than 100 to 200 words.
+                Here are some tips for keeping a cover letter concise:
+                Get Straight to the Point: Start with a clear introduction and state the purpose of your letter
+                in the first paragraph.
+                Highlight Key Points: Focus on the most relevant qualifications and experiences that
+                align with the job requirements.
+                Avoid Redundancy: Dont repeat information thats already in your resume.
+                Instead, provide context or additional insights that arent evident from the resume.
+                Be Clear and Direct: Use clear and straightforward language. Avoid jargon,
+                overly complex sentences, and unnecessary filler words.
+                Strong Closing: End with a strong closing statement, expressing your enthusiasm
+                for the role and the value you would bring to the company. 
+                """
         
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",

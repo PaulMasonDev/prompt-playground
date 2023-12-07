@@ -28,7 +28,7 @@ const ResponseTextContainer = ({
 const styles = StyleSheet.create({
   responseTextContainer: {
     flex: 1, // Takes the remaining space of the screen
-    marginTop: 10,
+    marginTop: 20,
     paddingLeft: 4,
   },
   responseHeader: {

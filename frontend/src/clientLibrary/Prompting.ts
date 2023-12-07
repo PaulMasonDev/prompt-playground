@@ -48,11 +48,18 @@ export const getPromptResponse = async (prompt: string, type: string) => {
 
 export const getCoverLetterResponse = async (
   resume: string,
-  jobDesc: string
+  jobDesc: string,
+  isCasual: boolean,
+  isHumorous: boolean,
+  isConcise: boolean
 ) => {
   try {
     const response = await fetch(
-      `${BACKEND_API}/prompting/cover?resume=${resume}&jobDesc=${jobDesc}`,
+      `${BACKEND_API}/prompting/cover?resume=${resume}&jobDesc=${jobDesc}&isCasual=${
+        isCasual ? "true" : ""
+      }&isHumorous=${isHumorous ? "true" : ""}&isConcise=${
+        isConcise ? "true" : ""
+      }`,
       {
         method: "GET",
         headers: {

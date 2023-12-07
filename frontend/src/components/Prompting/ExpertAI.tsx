@@ -8,6 +8,7 @@ import ResultsHeader from "../UIComponents/ResultsHeader";
 import ResponseTextContainer from "../UIComponents/ResponseTextContainer";
 import { commonStyles } from "../UIComponents/commonStyles";
 import { RadioGroup } from "../UIComponents/FormElements/RadioOptions";
+import { CommonLayout } from "../UIComponents/CommonLayout";
 
 export const ExpertAI = () => {
   const [prompt, setPrompt] = useState("");
@@ -36,8 +37,8 @@ export const ExpertAI = () => {
 
   const canSubmit = prompt;
 
-  return (
-    <View style={commonStyles.container}>
+  const inputSection = (
+    <>
       <CustomTextInput
         value={prompt}
         onChangeText={setPrompt}
@@ -58,6 +59,11 @@ export const ExpertAI = () => {
         onPress={handlePress}
         disabled={!canSubmit}
       />
+    </>
+  );
+
+  const outputSection = (
+    <>
       {response && (
         <ResultsHeader
           prompt={prompt}
@@ -67,11 +73,14 @@ export const ExpertAI = () => {
           setFeedbackSubmitted={setFeedbackSubmitted}
         />
       )}
-
       <ResponseTextContainer
         response={response}
         responseHeader={responseHeader}
       />
-    </View>
+    </>
+  );
+
+  return (
+    <CommonLayout inputSection={inputSection} outputSection={outputSection} />
   );
 };
