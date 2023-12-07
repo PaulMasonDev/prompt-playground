@@ -46,8 +46,11 @@ class Feedback(FeedbackBase):
 # Prompt Schemas
 class PromptBase(BaseModel):
     prompt: str
+    prompt_tokens: int
     response: str
+    response_tokens: int
     elapsed_time: float
+    response_score: float
     prompt_type: str
 
 class PromptCreate(PromptBase):

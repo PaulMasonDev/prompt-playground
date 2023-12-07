@@ -46,9 +46,17 @@ export const ExpertAI = () => {
         clearTextOnFocus
       />
       <RadioGroup
+        // TODO: This functionality should be applied everywhere.
         options={[
           { label: "English", value: "" },
+          { label: "Mandarin", value: "Mandarin Language" },
           { label: "Spanish", value: "Spanish Language" },
+          { label: "Hindi", value: "Hindi Language" },
+          { label: "Bengali", value: "Bengali Language" },
+          { label: "Portuguese", value: "Portuguese Language" },
+          { label: "Russian", value: "Russian Language" },
+          { label: "Arabic", value: "Arabic Language" },
+          { label: "French", value: "French Language" },
           { label: "Pirate", value: "Pirate" },
           { label: "Fifth Grader", value: "5th Grade Teacher" },
         ]}

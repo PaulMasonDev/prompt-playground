@@ -36,8 +36,11 @@ class Prompt(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     prompt = Column(String)
+    prompt_tokens = Column(Integer)
     response = Column(String)
+    response_tokens = Column(Integer)
     prompt_type = Column(String)
+    response_score = Column(Float)
     elapsed_time = Column(Float)
     created_at = Column(DateTime, default=datetime.utcnow)
 

@@ -1,16 +1,8 @@
-import os
-import openai
-import datetime
+
 from fastapi import APIRouter, Depends
+from prompt_logging import log_prompt_to_db
 from sqlalchemy.orm import Session
 from auth import get_db
-from dotenv import load_dotenv
-import models
-
-load_dotenv()
-
-SECRET_KEY = os.getenv('OPEN_AI_KEY')
-openai.api_key = SECRET_KEY
 
 router = APIRouter()
 
@@ -141,35 +133,35 @@ def get_email_response(original: str, goal: str, db: Session):
     return server_response
         
     
-def log_prompt_to_db(system_message: str, user_message: str, prompt_type: str, db: Session, max_tokens=1000):
-    response_time = 0.0
-    server_response = ""
-    try:
-        start_time = datetime.datetime.now()
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": system_message
-                },
-                {"role": "user", "content": f"{user_message}"}
-            ],
-            temperature=0.7,
-            max_tokens=max_tokens,
-        )
-        end_time = datetime.datetime.now()
-        response_time = (end_time - start_time).total_seconds()
-        server_response = response.choices[0].message['content']
-    except Exception as e:
-        print('ERROR:', e)
-        return None
+# def log_prompt_to_db(system_message: str, user_message: str, prompt_type: str, db: Session, max_tokens=1000):
+#     response_time = 0.0
+#     server_response = ""
+#     try:
+#         start_time = datetime.datetime.now()
+#         response = openai.ChatCompletion.create(
+#             model="gpt-3.5-turbo",
+#             messages=[
+#                 {"role": "system", "content": system_message
+#                 },
+#                 {"role": "user", "content": f"{user_message}"}
+#             ],
+#             temperature=0.7,
+#             max_tokens=max_tokens,
+#         )
+#         end_time = datetime.datetime.now()
+#         response_time = (end_time - start_time).total_seconds()
+#         server_response = response.choices[0].message['content']
+#     except Exception as e:
+#         print('ERROR:', e)
+#         return None
     
-    db_prompt = models.Prompt(
-        prompt=user_message,
-        response=server_response,
-        prompt_type=prompt_type,
-        elapsed_time=response_time
-    )
-    db.add(db_prompt)
-    db.commit()
-    db.refresh(db_prompt)
-    return server_response
+#     db_prompt = models.Prompt(
+#         prompt=user_message,
+#         response=server_response,
+#         prompt_type=prompt_type,
+#         elapsed_time=response_time
+#     )
+#     db.add(db_prompt)
+#     db.commit()
+#     db.refresh(db_prompt)
+#     return server_response
