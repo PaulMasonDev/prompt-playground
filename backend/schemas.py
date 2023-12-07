@@ -43,6 +43,21 @@ class Feedback(FeedbackBase):
     id: int
     created_at: Optional[datetime] = Field(default_factory=datetime.utcnow)
 
+# Prompt Schemas
+class PromptBase(BaseModel):
+    prompt: str
+    response: str
+    elapsed_time: float
+    prompt_type: str
+
+class PromptCreate(PromptBase):
+    pass
+
+class Prompt(PromptBase):
+    id: int
+    created_at: Optional[datetime] = Field(default_factory=datetime.utcnow)
+
+
 # Token Schemas
 class Token(BaseModel):
     access_token: str

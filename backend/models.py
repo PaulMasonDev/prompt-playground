@@ -1,4 +1,4 @@
-from sqlalchemy import Column, ForeignKey, Integer, String, DateTime
+from sqlalchemy import Column, ForeignKey, Integer, String, DateTime, Float
 from sqlalchemy.orm import relationship
 from database import Base
 from datetime import datetime
@@ -29,5 +29,15 @@ class Feedback(Base):
     prompt = Column(String)
     response = Column(String)
     rating = Column(String)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+class Prompt(Base):
+    __tablename__ = "prompt"
+
+    id = Column(Integer, primary_key=True, index=True)
+    prompt = Column(String)
+    response = Column(String)
+    prompt_type = Column(String)
+    elapsed_time = Column(Float)
     created_at = Column(DateTime, default=datetime.utcnow)
 
