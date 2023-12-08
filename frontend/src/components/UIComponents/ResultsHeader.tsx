@@ -54,6 +54,7 @@ const styles = StyleSheet.create({
     padding: 10,
     paddingLeft: 0,
     paddingRight: 20,
+    height: 25,
   },
   copyIcon: {
     padding: 5,
