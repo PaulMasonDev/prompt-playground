@@ -48,11 +48,11 @@ def redact_personally_identifiable_info(user_string: str, db: Session):
 
 @router.post("/general", response_model=schemas.Feedback)
 def post_feedback(feedback: schemas.FeedbackCreate, db: Session = Depends(get_db)):
-    redacted_prompt = redact_personally_identifiable_info(feedback.prompt, db)
-    redacted_response = redact_personally_identifiable_info(feedback.response, db)
+    # redacted_prompt = redact_personally_identifiable_info(feedback.prompt, db)
+    # redacted_response = redact_personally_identifiable_info(feedback.response, db)
     db_feedback = models.Feedback(
-            prompt=redacted_prompt,
-            response=redacted_response,
+            prompt=feedback.prompt,
+            response=feedback.response,
             rating=feedback.rating,
             type=feedback.type
         )
