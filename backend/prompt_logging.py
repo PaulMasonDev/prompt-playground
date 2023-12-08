@@ -11,7 +11,7 @@ SECRET_KEY = os.getenv('OPEN_AI_KEY')
 openai.api_key = SECRET_KEY
 
 def log_prompt_to_db(system_message: str, user_message: str, prompt_type: str, db: Session, max_tokens=1000, model="gpt-3.5-turbo"):
-    # response_time = 0.0
+    response_time = 0.0
     server_response = ""
     try:
         start_time = datetime.datetime.now()
@@ -25,28 +25,28 @@ def log_prompt_to_db(system_message: str, user_message: str, prompt_type: str, d
             temperature=0.7,
             max_tokens=max_tokens,
         )
-        # end_time = datetime.datetime.now()
-        # response_time = (end_time - start_time).total_seconds()
+        end_time = datetime.datetime.now()
+        response_time = (end_time - start_time).total_seconds()
         server_response = response.choices[0].message['content']
     except Exception as e:
         print('ERROR:', e)
         return ""
     # TODO: Turn this back on later.
-    # prompt_token_count = estimate_token_count(user_message)
-    # response_token_count = estimate_token_count(server_response)
-    # db_prompt = models.Prompt(
-    #     # TODO: Remove prompt and response from db since it will no longer be used
-    #     prompt="",
-    #     response="",
-    #     prompt_tokens=prompt_token_count,
-    #     response_tokens=response_token_count,
-    #     prompt_type=prompt_type,
-    #     response_score=score_response(response_time, prompt_token_count, response_token_count),
-    #     elapsed_time=response_time
-    # )
-    # db.add(db_prompt)
-    # db.commit()
-    # db.refresh(db_prompt)
+    prompt_token_count = estimate_token_count(user_message)
+    response_token_count = estimate_token_count(server_response)
+    db_prompt = models.Prompt(
+        # TODO: Remove prompt and response from db since it will no longer be used
+        prompt=user_message,
+        response=server_response,
+        prompt_tokens=prompt_token_count,
+        response_tokens=response_token_count,
+        prompt_type=prompt_type,
+        response_score=score_response(response_time, prompt_token_count, response_token_count),
+        elapsed_time=response_time
+    )
+    db.add(db_prompt)
+    db.commit()
+    db.refresh(db_prompt)
     return server_response
 
 def estimate_token_count(text):
