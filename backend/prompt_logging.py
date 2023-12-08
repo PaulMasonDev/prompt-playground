@@ -10,13 +10,13 @@ load_dotenv()
 SECRET_KEY = os.getenv('OPEN_AI_KEY')
 openai.api_key = SECRET_KEY
 
-def log_prompt_to_db(system_message: str, user_message: str, prompt_type: str, db: Session, max_tokens=1000):
+def log_prompt_to_db(system_message: str, user_message: str, prompt_type: str, db: Session, max_tokens=1000, model="gpt-3.5-turbo"):
     response_time = 0.0
     server_response = ""
     try:
         start_time = datetime.datetime.now()
         response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
+            model=model,
             messages=[
                 {"role": "system", "content": system_message
                 },

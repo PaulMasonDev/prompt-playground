@@ -21,6 +21,8 @@ def career_craft_generated_message():
 def email_generated_message():
     return get_generated_message("EmailAI")
 
+gpt_4_model="gpt-4"
+
 @router.get("/expert")
 def get_ai_response(message: str, type: str, db: Session = Depends(get_db)):
     return expert_prompt(message, type, db)
@@ -85,7 +87,7 @@ def get_cover_letter(
         (use an emoji for them if needed). Bullet points can be a powerful tool
         in a cover letter when used judiciously. They should complement, not replace, the narrative
         flow of your letter. The key is to balance brevity and impact with a personal and engaging tone.
-        After the salutation, conclude with a friendly message separate from the cover letter advising them to
+        After the cover letter ending, include a friendly message separate from the cover letter advising them to
         verify the cover letter accuracy with their actual skills and experience before applying to jobs.
         {career_craft_generated_message()}"""
     
@@ -117,7 +119,7 @@ def get_cover_letter(
             Strong Closing: End with a strong closing statement, expressing your enthusiasm
             for the role and the value you would bring to the company. 
             """
-    server_response = log_prompt_to_db(system_message, message, "cover", db)
+    server_response = log_prompt_to_db(system_message, message, "cover", db, 1000, gpt_4_model)
     return server_response
 
 class ResumeFeedbackRequest(BaseModel):
@@ -133,13 +135,13 @@ def get_resume_feedback(resume: str, jobDesc: str, db: Session):
     system_message = f"""As an expert resume writer, you excel at identifying key
         elements in a user's resume and effectively aligning them with the job description.
         Your approach ensures authenticity, focusing on the user's actual background and experience
-        without any embellishment. Conclude with a friendly message advising them to verify the
+        without any embellishment. After the feedback, give a friendly message advising them to verify the
         resume feedback accuracy with their skills and experience before applying to jobs. {career_craft_generated_message()}"""
     
     message = f"""I need some feedback on how I can beef up my resume based on the job description.  Here is my resume: ${resume} 
         | Here is the job description: ${jobDesc} """
     
-    server_response = log_prompt_to_db(system_message, message, "resume", db)
+    server_response = log_prompt_to_db(system_message, message, "resume", db, 1000, gpt_4_model)
     return server_response
 
 class ResumeRewriteRequest(BaseModel):
@@ -152,19 +154,19 @@ def get_resume_rewrite_response(request: ResumeRewriteRequest, db: Session = Dep
     return get_resume_rewrite(text, request.jobDesc, db)
 
 def get_resume_rewrite(resume: str, jobDesc: str, db:Session):
-    system_message = f"""You are a skilled resume writer with a keen eye for aligning a user's
-        existing resume content with a job description. Your task is to expertly rewrite the resume,
-        ensuring all information accurately reflects the user's actual background without any fabrication.
-        Keep the original format intact, using emojis or unicode characters for bullet points as needed.
-        Exclude the job description from your response. After the rewrite, briefly explain the major
-        content changes you made, excluding formatting details. Ensure the final version represents
-        your rewrite, not the original. Conclude with a friendly message advising them to verify the
-        resume's accuracy with their skills and experience before applying to jobs. {career_craft_generated_message()}"""
+    system_message = f"""Be prepared to rewrite a resume to better align with a specific
+        job description. This information will be provided by a user. Use that resume as a base,
+        ensuring all information reflects the user's real background without fabrication. First, identify 
+        places where the resume should be updated. Go through each of those places and update them.
+        After the rewrites, place them in the appropriate places back into the original resume provided
+        by the user. Also provide a brief explanation of the major content changes made, excluding
+        formatting details. Conclude with a reminder for the user to verify the accuracy of the resume
+        in relation to their skills and experience before applying for jobs. {career_craft_generated_message()}"""
     
     message = f"""I need rewrite on my resume based on the job description.  Here is my resume: ${resume} 
         | Here is the job description: ${jobDesc} """
 
-    server_response = log_prompt_to_db(system_message, message, "rewrite", db)
+    server_response = log_prompt_to_db(system_message, message, "rewrite", db, 1000, gpt_4_model)
     return server_response
 
 @router.get("/email")
@@ -182,5 +184,5 @@ def get_email_response(original: str, goal: str, db: Session):
     if len(goal) > 0:
         message = message + f"I also want to be sure that it achieves this purpose: {goal}"
     
-    server_response = log_prompt_to_db(system_message, message, "email", db)
+    server_response = log_prompt_to_db(system_message, message, "email", db, 1000, gpt_4_model)
     return server_response
