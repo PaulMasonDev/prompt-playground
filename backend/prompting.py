@@ -21,7 +21,7 @@ def career_craft_generated_message():
 def email_generated_message():
     return get_generated_message("EmailAI")
 
-gpt_4_model="gpt-4"
+gpt_4_model="gpt-4-1106-preview"
 
 @router.get("/expert")
 def get_ai_response(message: str, type: str, db: Session = Depends(get_db)):
