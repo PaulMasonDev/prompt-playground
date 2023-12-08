@@ -3,6 +3,7 @@ import Icon from "@expo/vector-icons/FontAwesome";
 import { FeedbackPayload, sendFeedback } from "../../clientLibrary/Prompting";
 import useUserStore from "../../utils/store";
 import { useCommonAnims } from "./useCommonAnims";
+import { colors } from "./commonStyles";
 
 export const Feedback = ({
   feedbackSubmitted,
@@ -36,14 +37,14 @@ export const Feedback = ({
         <Icon
           name="thumbs-up"
           size={20}
-          color="green"
+          color={colors.positiveFeedback}
           style={{ marginRight: 10 }}
           onPress={() => handlePress("positive")}
         />
         <Icon
           name="thumbs-down"
           size={20}
-          color="#db2727"
+          color={colors.negativeFeedback}
           onPress={() => handlePress("negative")}
         />
       </View>

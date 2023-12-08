@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { View, TouchableOpacity, Text } from "react-native";
+import { colors } from "../commonStyles";
 
 interface RadioButtonProps {
   label: string;
@@ -18,7 +19,7 @@ const RadioButton = ({ label, value, checked, onPress }: RadioButtonProps) => (
           width: 20,
           borderRadius: 10,
           borderWidth: 1,
-          borderColor: "#fff",
+          borderColor: colors.accent,
           alignItems: "center",
           justifyContent: "center",
         }}
@@ -29,12 +30,12 @@ const RadioButton = ({ label, value, checked, onPress }: RadioButtonProps) => (
               height: 12,
               width: 12,
               borderRadius: 6,
-              backgroundColor: "#fff",
+              backgroundColor: colors.accent,
             }}
           />
         )}
       </View>
-      <Text style={{ marginLeft: 10, marginRight: 10, color: "white" }}>
+      <Text style={{ marginLeft: 10, marginRight: 10, color: colors.text }}>
         {label}
       </Text>
     </View>
@@ -58,7 +59,7 @@ export const RadioGroup = ({ options, setExternalValue }: RadioGroupProps) => {
   };
 
   return (
-    <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
+    <View style={{ flexDirection: "row", flexWrap: "wrap", paddingLeft: 2 }}>
       {options.map((option) => (
         <RadioButton
           key={option.value}

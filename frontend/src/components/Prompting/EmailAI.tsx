@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { getEmailResponse } from "../../clientLibrary/Prompting";
 import useUserStore from "../../utils/store";
 import { CustomTextInput } from "../UIComponents/FormElements/CustomTextInput";
@@ -6,6 +6,7 @@ import { CustomButton } from "../UIComponents/FormElements/CustomButton";
 import ResultsHeader from "../UIComponents/ResultsHeader";
 import ResponseTextContainer from "../UIComponents/ResponseTextContainer";
 import { CommonLayout } from "../UIComponents/CommonLayout";
+import { View } from "react-native";
 
 export const EmailAI = () => {
   const [originalEmail, setOriginalEmail] = useState("");
@@ -36,6 +37,7 @@ export const EmailAI = () => {
       <CustomTextInput
         value={originalEmail}
         onChangeText={setOriginalEmail}
+        onSubmit={handlePress}
         placeholder="Paste Original Email"
         multiline
         clearTextOnFocus
@@ -43,6 +45,7 @@ export const EmailAI = () => {
       <CustomTextInput
         value={goal}
         onChangeText={setGoal}
+        onSubmit={handlePress}
         placeholder="(Optional) What should this email accomplish?"
         clearTextOnFocus
       />
@@ -70,6 +73,10 @@ export const EmailAI = () => {
   );
 
   return (
-    <CommonLayout inputSection={inputSection} outputSection={outputSection} />
+    <CommonLayout
+      inputSection={inputSection}
+      outputSection={outputSection}
+      isResponseVisible={response !== ""}
+    />
   );
 };

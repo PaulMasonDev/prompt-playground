@@ -1,30 +1,44 @@
 import { StyleSheet } from "react-native";
 
+export const colors = {
+  primary: "#0f3460",
+  secondary: "#16213e",
+  tertiary: "#1a1a2e",
+  accent: "#4D9BF5", // or any other bright, yet not overpowering, blue
+  text: "#FFFFFF",
+  textSecondary: "#e0e0e0",
+  positiveFeedback: "#3a9a5f", // a muted green
+  negativeFeedback: "#a93f3f", // a muted red
+  warning: "#f1c40f",
+  neutral: "#3a3a58",
+};
+
 export const commonStyles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#1a1a2e", // Dark background for a techy feel
+    backgroundColor: colors.primary, // Dark background for a techy feel
     padding: 20,
   },
   textInput: {
-    backgroundColor: "#16213e", // Slightly lighter shade for input fields
-    color: "#e0e0e0", // Light text for readability
+    backgroundColor: colors.tertiary, // Slightly lighter shade for input fields
+    color: colors.textSecondary, // Light text for readability
     borderRadius: 5,
     padding: 10,
-    marginBottom: 10,
+    marginBottom: 5,
     borderWidth: 1,
-    borderColor: "#0f3460", // Subtle border color
+    borderColor: colors.primary, // Subtle border color
   },
   button: {
-    backgroundColor: "#0f3460", // Matching the theme's accent color
+    backgroundColor: colors.secondary, // Matching the theme's accent color
     borderRadius: 5,
     padding: 15,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 10,
+    marginTop: 5,
+    marginBottom: 0,
   },
   buttonText: {
-    color: "#e0e0e0", // Light text on the button for contrast
+    color: colors.text, // Light text on the button for contrast
     fontSize: 16,
     fontWeight: "bold",
   },

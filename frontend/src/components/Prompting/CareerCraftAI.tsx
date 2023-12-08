@@ -101,6 +101,7 @@ export const CareerCraftAI = () => {
       <CustomTextInput
         value={formData.jobDesc}
         onChangeText={(value) => updateFormData("jobDesc", value)}
+        onSubmit={handlePress}
         placeholder="Paste Job Description"
         multiline
         clearTextOnFocus
@@ -173,6 +174,10 @@ export const CareerCraftAI = () => {
   );
 
   return (
-    <CommonLayout inputSection={inputSection} outputSection={outputSection} />
+    <CommonLayout
+      inputSection={inputSection}
+      outputSection={outputSection}
+      isResponseVisible={response !== ""}
+    />
   );
 };

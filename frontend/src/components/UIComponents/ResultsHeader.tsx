@@ -29,7 +29,7 @@ const ResultsHeader = ({
     <View style={styles.resultsHeaderContainer}>
       <Animated.View style={[styles.copyIcon, wobbleStyle]}>
         <TouchableOpacity onPress={() => copyToClipboard(response)}>
-          <Icon name="copy" size={20} color="#FFF" />
+          <Icon name="copy" size={20} color={"#FFF"} />
         </TouchableOpacity>
       </Animated.View>
 

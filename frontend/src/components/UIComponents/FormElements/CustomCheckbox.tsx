@@ -7,6 +7,7 @@ import {
   GestureResponderEvent,
 } from "react-native";
 import Icon from "@expo/vector-icons/FontAwesome"; // or any other icon library
+import { colors } from "../commonStyles";
 
 interface CustomCheckboxProps {
   label: string;
@@ -31,7 +32,7 @@ export const CustomCheckbox = ({
           iconName === "check-square-o" && { left: 1.5 },
         ]}
       >
-        <Icon name={iconName} size={iconHeight} color="white" />
+        <Icon name={iconName} size={iconHeight} color={colors.accent} />
       </View>
       {label && <Text style={styles.label}>{label}</Text>}
     </TouchableOpacity>

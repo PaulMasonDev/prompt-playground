@@ -92,8 +92,6 @@ def get_cover_letter(
     if isEmoji == True:
         system_message += emoji_usage
 
-    print(system_message)
-
     message = f"""I need a cover letter written for me.  Here is my resume: ${resume} 
             | Here is the job description: ${jobDesc} """
         
@@ -120,7 +118,6 @@ def get_cover_letter(
             for the role and the value you would bring to the company. 
             """
     server_response = log_prompt_to_db(system_message, message, "cover", db)
-    print(isEmoji, system_message)
     return server_response
 
 class ResumeFeedbackRequest(BaseModel):

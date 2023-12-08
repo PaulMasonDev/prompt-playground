@@ -5,6 +5,7 @@ import BottomTabNavigator from "./src/components/Navigation/BottomTabNavigator";
 import useUserStore from "./src/utils/store";
 // import { getUserInfo } from "./src/clientLibrary/Auth";
 import Loader from "./src/utils/Loader/Loader";
+import { colors } from "./src/components/UIComponents/commonStyles";
 
 function App() {
   const { setUser, isLoading, loadingMessage } = useUserStore();
@@ -31,7 +32,7 @@ function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: colors.text,
     maxWidth: 450,
   },
 });

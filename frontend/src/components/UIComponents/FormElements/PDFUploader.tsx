@@ -2,7 +2,7 @@
 
 import React, { ChangeEvent, useState } from "react";
 import { View, Platform, Text, StyleSheet } from "react-native";
-import { commonStyles } from "../commonStyles";
+import { colors, commonStyles } from "../commonStyles";
 
 interface PDFUploaderProps {
   setState: (fieldName: string, value: string | boolean) => void;
@@ -63,8 +63,8 @@ const PDFUploader = ({ setState }: PDFUploaderProps) => {
 
 const styles = StyleSheet.create({
   pdfUploaderLabel: {
-    backgroundColor: "#0f3460",
-    color: "#e0e0e0",
+    backgroundColor: colors.tertiary,
+    color: colors.text,
     fontFamily: "Arial",
     borderRadius: 5,
     padding: 15,
@@ -84,8 +84,8 @@ const styles = StyleSheet.create({
   pdfUploaderFileName: {
     color: "#e0e0e0",
     fontFamily: "Arial",
-    marginTop: 10,
-    marginBottom: 20,
+    marginTop: 5,
+    marginBottom: 10,
     // Additional styles for the file name display
   },
   placeholderContainer: {

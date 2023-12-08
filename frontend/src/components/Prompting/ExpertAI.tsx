@@ -1,12 +1,10 @@
 import { useState } from "react";
-import { View } from "react-native";
 import { getPromptResponse } from "../../clientLibrary/Prompting";
 import useUserStore from "../../utils/store";
 import { CustomTextInput } from "../UIComponents/FormElements/CustomTextInput";
 import { CustomButton } from "../UIComponents/FormElements/CustomButton";
 import ResultsHeader from "../UIComponents/ResultsHeader";
 import ResponseTextContainer from "../UIComponents/ResponseTextContainer";
-import { commonStyles } from "../UIComponents/commonStyles";
 import { RadioGroup } from "../UIComponents/FormElements/RadioOptions";
 import { CommonLayout } from "../UIComponents/CommonLayout";
 
@@ -42,6 +40,7 @@ export const ExpertAI = () => {
       <CustomTextInput
         value={prompt}
         onChangeText={setPrompt}
+        onSubmit={handlePress}
         placeholder="What do you need assistance with?"
         clearTextOnFocus
       />
@@ -89,6 +88,10 @@ export const ExpertAI = () => {
   );
 
   return (
-    <CommonLayout inputSection={inputSection} outputSection={outputSection} />
+    <CommonLayout
+      inputSection={inputSection}
+      outputSection={outputSection}
+      isResponseVisible={response !== ""}
+    />
   );
 };
