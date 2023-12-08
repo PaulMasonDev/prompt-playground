@@ -46,26 +46,24 @@ export const getPromptResponse = async (prompt: string, type: string) => {
   }
 };
 
-export const getCoverLetterResponse = async (
-  resume: string,
-  jobDesc: string,
-  isCasual: boolean,
-  isHumorous: boolean,
-  isConcise: boolean
-) => {
+// Career Craft
+export interface CareerCraftPayload {
+  resume: string;
+  jobDesc: string;
+  isCasual?: boolean;
+  isHumorous?: boolean;
+  isConcise?: boolean;
+  isEmoji?: boolean;
+}
+
+export const getCoverLetterResponse = async (payload: CareerCraftPayload) => {
   try {
     const response = await fetch(`${BACKEND_API}/prompting/cover`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        resume,
-        jobDesc,
-        isCasual,
-        isHumorous,
-        isConcise,
-      }),
+      body: JSON.stringify(payload),
     });
 
     const data = await response.json();
@@ -79,17 +77,18 @@ export const getCoverLetterResponse = async (
   }
 };
 
-export const getResumeFeedback = async (resume: string, jobDesc: string) => {
+export const getResumeFeedback = async (payload: CareerCraftPayload) => {
   try {
-    const response = await fetch(
-      `${BACKEND_API}/prompting/resume?resume=${resume}&jobDesc=${jobDesc}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-      }
-    );
+    const response = await fetch(`${BACKEND_API}/prompting/resume`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        resume: payload.resume,
+        jobDesc: payload.jobDesc,
+      }),
+    });
 
     const data = await response.json();
     return data;
@@ -102,17 +101,18 @@ export const getResumeFeedback = async (resume: string, jobDesc: string) => {
   }
 };
 
-export const getResumeRewrite = async (resume: string, jobDesc: string) => {
+export const getResumeRewrite = async (payload: CareerCraftPayload) => {
   try {
-    const response = await fetch(
-      `${BACKEND_API}/prompting/rewrite?resume=${resume}&jobDesc=${jobDesc}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-      }
-    );
+    const response = await fetch(`${BACKEND_API}/prompting/rewrite`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        resume: payload.resume,
+        jobDesc: payload.jobDesc,
+      }),
+    });
 
     const data = await response.json();
     return data;

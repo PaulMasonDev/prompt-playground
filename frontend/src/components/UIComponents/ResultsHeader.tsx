@@ -11,7 +11,7 @@ interface ResultsHeaderProps {
   type: string;
   feedbackSubmitted: boolean;
   setFeedbackSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
-  feedbackOff: boolean;
+  feedbackOff?: boolean;
 }
 
 const ResultsHeader = ({
@@ -20,10 +20,11 @@ const ResultsHeader = ({
   type,
   feedbackSubmitted,
   setFeedbackSubmitted,
-  feedbackOff,
+  feedbackOff = false,
 }: ResultsHeaderProps) => {
   const { wobbleStyle } = useCommonAnims();
 
+  // TODO: Visual check mark indicator that the content was in fact copied
   return (
     <View style={styles.resultsHeaderContainer}>
       <Animated.View style={[styles.copyIcon, wobbleStyle]}>

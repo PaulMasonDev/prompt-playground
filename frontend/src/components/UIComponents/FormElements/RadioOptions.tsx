@@ -46,7 +46,7 @@ interface RadioGroupProps {
     label: string;
     value: string;
   }[];
-  setExternalValue: (value: string) => void;
+  setExternalValue: (value: any) => void;
 }
 
 export const RadioGroup = ({ options, setExternalValue }: RadioGroupProps) => {

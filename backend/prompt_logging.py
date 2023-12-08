@@ -30,7 +30,7 @@ def log_prompt_to_db(system_message: str, user_message: str, prompt_type: str, d
         server_response = response.choices[0].message['content']
     except Exception as e:
         print('ERROR:', e)
-        return None
+        return ""
     prompt_token_count = estimate_token_count(user_message)
     response_token_count = estimate_token_count(server_response)
     db_prompt = models.Prompt(

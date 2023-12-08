@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends
+from prompt_logging import log_prompt_to_db
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from auth import get_db
@@ -20,39 +21,35 @@ class Feedback(BaseModel):
     rating: str
     type: str
 
-def redact_personally_identifiable_info(user_string: str):
-    print("user_str: " + user_string)
-    try:
-        system_message = """
-            Your task is to redact personally identifiable information (PII) from the following text. 
-            Do not redact basic information like simple mathematical expressions or general knowledge. 
-            Focus on redacting sensitive details like names, phone numbers, social security numbers, email addresses, 
-            LinkedIn profiles, and other types of personal contact information or websites. 
-            For example, 'My name is Paul Mason' should be changed to 'My name is [FULL_NAME]'. 
-            However, do not alter or redact non-sensitive information like the answer to '2 plus 2'.
-            """
+def redact_personally_identifiable_info(user_string: str, db: Session):
+    system_message = """
+        Your task is to redact personally identifiable information (PII) from the text. Please adhere to the following guidelines:
 
+        1. Redact all sensitive PII, including:
+        - Full names (e.g., 'John Doe' should be '[FULL_NAME]')
+        - Phone numbers
+        - Social security numbers
+        - Email addresses
+        - LinkedIn profiles and personal websites
 
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": system_message
-                },
-                {"role": "user", "content": user_string}
-            ],
-            temperature=0.7,
-            max_tokens=500,
-        )
-        print("response: " + response.choices[0].message['content'])
-        return response.choices[0].message['content']
-    except Exception as e:
-        print('ERROR:', e)
-        return None
+        2. Do not redact:
+        - General knowledge
+        - Basic information such as simple mathematical expressions
+
+        3. In cases of ambiguity (e.g., a name that is also a place), use your discretion to decide whether it qualifies as PII.
+
+        4. If uncertain about whether something is PII, lean towards redaction for safety.
+
+        Remember, the goal is to protect privacy while maintaining the overall meaning and coherence of the text.
+
+        """
+    server_response = log_prompt_to_db(system_message, user_string, "redaction", db)
+    return server_response
 
 @router.post("/general", response_model=schemas.Feedback)
 def post_feedback(feedback: schemas.FeedbackCreate, db: Session = Depends(get_db)):
-    redacted_prompt = redact_personally_identifiable_info(feedback.prompt)
-    redacted_response = redact_personally_identifiable_info(feedback.response)
+    redacted_prompt = redact_personally_identifiable_info(feedback.prompt, db)
+    redacted_response = redact_personally_identifiable_info(feedback.response, db)
     db_feedback = models.Feedback(
             prompt=redacted_prompt,
             response=redacted_response,

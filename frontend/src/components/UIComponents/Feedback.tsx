@@ -17,12 +17,18 @@ export const Feedback = ({
   const { fadeStyle } = useCommonAnims();
 
   const handlePress = async (rating: string) => {
-    setLoading(true);
+    setLoading(
+      true,
+      "Thanks so much for sharing your thoughts with us! Your feedback is invaluable and helps us grow better every day. We're now processing your input with care. This might take a few seconds, but rest assured, it's time well spent in our quest to provide you with an even better experience. Stay tuned!"
+    );
     await sendFeedback({ ...props, rating });
     setFeedbackSubmitted(true);
-    setLoading(false);
+    setLoading(false, "");
   };
 
+  // TODO: Add a single field in db for user to write what was good / what needs work.
+  // Could be done after the user clicks the thumbs up. Focus goes to new input and then they hit a submit btn
+  // or something.
   return !feedbackSubmitted ? (
     <Animated.View style={[styles.container, fadeStyle]}>
       <Text style={[styles.feedbackPrompting]}>How did I do?</Text>

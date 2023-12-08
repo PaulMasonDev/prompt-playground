@@ -7,7 +7,7 @@ import ResultsHeader from "../UIComponents/ResultsHeader";
 import ResponseTextContainer from "../UIComponents/ResponseTextContainer";
 import { CommonLayout } from "../UIComponents/CommonLayout";
 
-export const EmailResponder = () => {
+export const EmailAI = () => {
   const [originalEmail, setOriginalEmail] = useState("");
   const [goal, setGoal] = useState("");
   const [response, setResponse] = useState("");

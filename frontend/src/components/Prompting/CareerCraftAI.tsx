@@ -1,6 +1,7 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { useState } from "react";
 import { View } from "react-native";
 import {
+  CareerCraftPayload,
   getCoverLetterResponse,
   getResumeFeedback,
   getResumeRewrite,
@@ -13,15 +14,25 @@ import ResponseTextContainer from "../UIComponents/ResponseTextContainer";
 import { RadioGroup } from "../UIComponents/FormElements/RadioOptions";
 import { CustomCheckbox } from "../UIComponents/FormElements/CustomCheckbox";
 import { CommonLayout } from "../UIComponents/CommonLayout";
+import PDFUploader from "../UIComponents/FormElements/PDFUploader";
+
+enum CareerPrompt {
+  Cover = "cover",
+  ResumeFeedback = "resume",
+  ResumeRewrite = "rewrite",
+}
 
 export const CareerCraftAI = () => {
-  const [resume, setResume] = useState("");
-  const [jobDesc, setJobDesc] = useState("");
-  const [isCasual, setIsCasual] = useState(false);
-  const [isHumorous, setIsHumorous] = useState(false);
-  const [isConcise, setIsConcise] = useState(false);
+  const [formData, setFormData] = useState<CareerCraftPayload>({
+    resume: "",
+    jobDesc: "",
+    isCasual: false,
+    isHumorous: false,
+    isConcise: false,
+    isEmoji: false,
+  });
 
-  const [type, setType] = useState("cover");
+  const [type, setType] = useState<CareerPrompt>(CareerPrompt.Cover);
 
   const [response, setResponse] = useState("");
   const [responseHeader, setResponseHeader] = useState("");
@@ -30,17 +41,46 @@ export const CareerCraftAI = () => {
 
   const [feedbackSubmitted, setFeedbackSubmitted] = useState(false);
 
-  const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const base64String = e.target?.result as string;
-        console.log(base64String.split(",")[1]);
-        setResume(base64String.split(",")[1]); // Split to remove the data URL part
-      };
-      reader.readAsDataURL(file);
+  const updateFormData = (fieldName: string, value: string | boolean) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [fieldName]: value,
+    }));
+  };
+
+  const isCover = type === CareerPrompt.Cover;
+  const isFeedback = type === CareerPrompt.ResumeFeedback;
+
+  const resetResponseState = () => {
+    setFeedbackSubmitted(false);
+    setResponse("");
+    setResponseHeader("");
+  };
+
+  const makeApiCall = () => {
+    if (isCover) return getCoverLetterResponse(formData);
+    if (isFeedback) return getResumeFeedback(formData);
+    return getResumeRewrite(formData);
+  };
+
+  const updateResponseState = (apiResponse: string) => {
+    setResponse(apiResponse);
+    setResponseHeader(generateResponseHeaderText());
+  };
+
+  const generateResponseHeaderText = () => {
+    let headerText = isCover
+      ? "Cover Letter"
+      : isFeedback
+      ? "Resume Feedback"
+      : "Resume Rewrite";
+    if (isCover) {
+      headerText += formData.isCasual ? " | Casual" : "";
+      headerText += formData.isHumorous ? " | Humorous" : "";
+      headerText += formData.isConcise ? " | Concise" : "";
+      headerText += formData.isEmoji ? " | Emojis" : "";
     }
+    return headerText;
   };
 
   const handlePress = async () => {
@@ -48,69 +88,29 @@ export const CareerCraftAI = () => {
       true,
       "Consulting my ATS bot friends...looking at the job description, looking at your resume...impressive! Just a little bit longer and I'll have what you need for you!"
     );
-    setFeedbackSubmitted(false);
-    setResponse("");
-    setResponseHeader("");
-    const apiCall =
-      type === "cover"
-        ? getCoverLetterResponse(
-            resume,
-            jobDesc,
-            isCasual,
-            isHumorous,
-            isConcise
-          )
-        : type === "resume"
-        ? getResumeFeedback(resume, jobDesc)
-        : getResumeRewrite(resume, jobDesc);
-    const apiResponse = await apiCall;
-    setResponse(apiResponse);
-    const responseHeaderText = `${
-      type === "cover"
-        ? "Cover Letter"
-        : type === "resume"
-        ? "Resume Feedback"
-        : "Resume Rewrite"
-    }${isCasual ? " | Casual" : ""}${isHumorous ? " | Humorous" : ""}${
-      isConcise ? " | Concise" : ""
-    }`;
-    setResponseHeader(responseHeaderText);
+    resetResponseState();
+    const apiResponse = await makeApiCall();
+    updateResponseState(apiResponse);
     setLoading(false, "");
   };
 
-  const canSubmit = resume && jobDesc;
+  const canSubmit = formData.resume && formData.jobDesc;
 
   const inputSection = (
     <>
       <CustomTextInput
-        value={jobDesc}
-        onChangeText={setJobDesc}
+        value={formData.jobDesc}
+        onChangeText={(value) => updateFormData("jobDesc", value)}
         placeholder="Paste Job Description"
         multiline
         clearTextOnFocus
       />
-      {/* <CustomTextInput
-        value={resume}
-        onChangeText={setResume}
-        placeholder="Paste Resume"
-        multiline
-        clearTextOnFocus
-      /> */}
-      <label style={{ color: "white", fontFamily: "Arial", marginRight: 5 }}>
-        Upload Resume
-        <input
-          type="file"
-          accept="application/pdf"
-          onChange={handleFileUpload}
-          style={{ margin: "10px 0", color: "white" }} // You can adjust the style as needed
-        />
-      </label>
-
+      <PDFUploader setState={updateFormData} />
       <RadioGroup
         options={[
           { label: "Write Cover Letter", value: "cover" },
-          // { label: "Resume Feedback", value: "resume" }, // TODO: Turn these back on after migrating endpoints to POST requests
-          // { label: "Resume Rewrite", value: "rewrite" },
+          { label: "Resume Feedback", value: "resume" },
+          { label: "Resume Rewrite", value: "rewrite" },
         ]}
         setExternalValue={setType}
       />
@@ -118,18 +118,23 @@ export const CareerCraftAI = () => {
         <View style={{ flexDirection: "row" }}>
           <CustomCheckbox
             label="Casual"
-            onCheck={() => setIsCasual(!isCasual)}
-            isChecked={isCasual}
+            onCheck={() => updateFormData("isCasual", !formData.isCasual)}
+            isChecked={formData.isCasual}
           />
           <CustomCheckbox
             label="Humorous"
-            onCheck={() => setIsHumorous(!isHumorous)}
-            isChecked={isHumorous}
+            onCheck={() => updateFormData("isHumorous", !formData.isHumorous)}
+            isChecked={formData.isHumorous}
           />
           <CustomCheckbox
             label="Concise"
-            onCheck={() => setIsConcise(!isConcise)}
-            isChecked={isConcise}
+            onCheck={() => updateFormData("isConcise", !formData.isConcise)}
+            isChecked={formData.isConcise}
+          />
+          <CustomCheckbox
+            label="Emojis"
+            onCheck={() => updateFormData("isEmoji", !formData.isEmoji)}
+            isChecked={formData.isEmoji}
           />
         </View>
       ) : (
@@ -147,14 +152,17 @@ export const CareerCraftAI = () => {
     <>
       {response && (
         <ResultsHeader
-          prompt={`Resume: ${resume} \n Job Description: ${jobDesc}${
-            isCasual ? "|casual" : ""
-          }${isHumorous ? "|humorous" : ""}${isConcise ? "|concise" : ""}`}
+          prompt={`Resume: ${formData.resume} \n Job Description: ${
+            formData.jobDesc
+          }${isCover && formData.isCasual ? "|casual" : ""}${
+            isCover && formData.isHumorous ? "|humorous" : ""
+          }${isCover && formData.isConcise ? "|concise" : ""}${
+            isCover && formData.isConcise ? "|emojis" : ""
+          }`}
           response={response}
           type={type}
           feedbackSubmitted={feedbackSubmitted}
           setFeedbackSubmitted={setFeedbackSubmitted}
-          feedbackOff={true} // TODO: Turn feedback on after debugged it
         />
       )}
       <ResponseTextContainer

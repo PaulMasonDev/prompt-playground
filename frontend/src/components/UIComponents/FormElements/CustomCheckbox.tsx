@@ -11,7 +11,7 @@ import Icon from "@expo/vector-icons/FontAwesome"; // or any other icon library
 interface CustomCheckboxProps {
   label: string;
   onCheck: (event: GestureResponderEvent) => void;
-  isChecked: boolean;
+  isChecked?: boolean;
 }
 
 const iconHeight = 24;

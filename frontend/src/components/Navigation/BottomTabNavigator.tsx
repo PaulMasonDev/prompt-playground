@@ -3,18 +3,18 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 // import Auth from "../Auth/Auth";
 import { ExpertAI } from "../Prompting/ExpertAI";
-import Icon from "@expo/vector-icons/FontAwesome";
-import { bottomTabStyles } from "./bottomTabStyles";
-import { EmailResponder } from "../Prompting/EmailResponder";
 import { CareerCraftAI } from "../Prompting/CareerCraftAI";
+import { EmailAI } from "../Prompting/EmailAI";
+import { bottomTabStyles } from "./bottomTabStyles";
+import Icon from "@expo/vector-icons/FontAwesome";
 
 const Tab = createBottomTabNavigator();
 
 enum AIRoute {
   Auth = "Auth",
-  ExpertAI = "ExpertAI",
   CareerCraftAI = "CareerCraftAI",
-  EmailResponder = "Email Responder",
+  EmailAI = "EmailAI",
+  ExpertAI = "ExpertAI",
 }
 
 function BottomTabNavigator() {
@@ -29,7 +29,7 @@ function BottomTabNavigator() {
             iconName = "flask";
           } else if (route.name === AIRoute.CareerCraftAI) {
             iconName = "file-text";
-          } else if (route.name === AIRoute.EmailResponder) {
+          } else if (route.name === AIRoute.EmailAI) {
             iconName = "reply";
           }
 
@@ -48,19 +48,19 @@ function BottomTabNavigator() {
         options={{ tabBarAccessibilityLabel: "Auth" }}
       /> */}
       <Tab.Screen
-        name={AIRoute.ExpertAI}
-        component={ExpertAI}
-        options={{ tabBarAccessibilityLabel: AIRoute.ExpertAI }}
-      />
-      <Tab.Screen
         name={AIRoute.CareerCraftAI}
         component={CareerCraftAI}
         options={{ tabBarAccessibilityLabel: AIRoute.CareerCraftAI }}
       />
       <Tab.Screen
-        name={AIRoute.EmailResponder}
-        component={EmailResponder}
-        options={{ tabBarAccessibilityLabel: AIRoute.EmailResponder }}
+        name={AIRoute.EmailAI}
+        component={EmailAI}
+        options={{ tabBarAccessibilityLabel: AIRoute.EmailAI }}
+      />
+      <Tab.Screen
+        name={AIRoute.ExpertAI}
+        component={ExpertAI}
+        options={{ tabBarAccessibilityLabel: AIRoute.ExpertAI }}
       />
     </Tab.Navigator>
   );
