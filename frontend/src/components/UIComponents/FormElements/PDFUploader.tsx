@@ -35,6 +35,9 @@ const PDFUploader = ({ setState }: PDFUploaderProps) => {
   if (Platform.OS === "web") {
     return (
       <View>
+        <Text style={styles.pdfUploaderFileName}>
+          {(fileName && `File Name: ${fileName}`) || ` `}
+        </Text>
         <label style={{ ...styles.pdfUploaderLabel, display: "inline-block" }}>
           {`Upload Resume - ${mb} MB file size limit`}
           <input
@@ -44,9 +47,6 @@ const PDFUploader = ({ setState }: PDFUploaderProps) => {
             style={styles.pdfUploaderInput} // Inline style for input specific properties
           />
         </label>
-        <Text style={styles.pdfUploaderFileName}>
-          {(fileName && `File Name: ${fileName}`) || ` `}
-        </Text>
       </View>
     );
   }
@@ -70,8 +70,8 @@ const styles = StyleSheet.create({
     padding: 15,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 10,
-    marginBottom: 10,
+    // marginTop: 10,
+    // marginBottom: 10,
     cursor: "pointer",
   },
   pdfUploaderInput: {
@@ -84,8 +84,7 @@ const styles = StyleSheet.create({
   pdfUploaderFileName: {
     color: "#e0e0e0",
     fontFamily: "Arial",
-    marginTop: 5,
-    marginBottom: 10,
+    // marginTop: 5
     // Additional styles for the file name display
   },
   placeholderContainer: {
