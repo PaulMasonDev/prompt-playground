@@ -98,15 +98,6 @@ export const CareerCraftAI = () => {
 
   const inputSection = (
     <>
-      <CustomTextInput
-        value={formData.jobDesc}
-        onChangeText={(value) => updateFormData("jobDesc", value)}
-        onSubmit={handlePress}
-        placeholder="Paste Job Description"
-        multiline
-        clearTextOnFocus
-      />
-      <PDFUploader setState={updateFormData} />
       <RadioGroup
         options={[
           { label: "Write Cover Letter", value: "cover" },
@@ -141,6 +132,15 @@ export const CareerCraftAI = () => {
       ) : (
         <View style={{ height: 29 }}></View>
       )}
+      <PDFUploader setState={updateFormData} />
+      <CustomTextInput
+        value={formData.jobDesc}
+        onChangeText={(value) => updateFormData("jobDesc", value)}
+        onSubmit={handlePress}
+        placeholder="Paste Job Description"
+        multiline
+        clearTextOnFocus
+      />
       <CustomButton
         title="Submit"
         onPress={handlePress}
