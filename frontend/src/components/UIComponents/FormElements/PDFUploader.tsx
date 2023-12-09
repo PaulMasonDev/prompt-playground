@@ -84,7 +84,9 @@ const styles = StyleSheet.create({
   pdfUploaderFileName: {
     color: "#e0e0e0",
     fontFamily: "Arial",
-    // marginTop: 5
+    marginTop: 5,
+    marginBottom: 5,
+    paddingLeft: 2
     // Additional styles for the file name display
   },
   placeholderContainer: {
