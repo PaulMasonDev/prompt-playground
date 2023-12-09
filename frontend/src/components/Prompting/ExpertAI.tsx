@@ -47,6 +47,7 @@ export const ExpertAI = () => {
           { label: "Bengali", value: "Bengali Language" },
           { label: "Portuguese", value: "Portuguese Language" },
           { label: "Russian", value: "Russian Language" },
+          { label: "Norwegian", value: "Norwegian Language" },
           { label: "Arabic", value: "Arabic Language" },
           { label: "French", value: "French Language" },
           { label: "Pirate", value: "Pirate" },
