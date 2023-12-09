@@ -6,6 +6,7 @@ import useUserStore from "./src/utils/store";
 // import { getUserInfo } from "./src/clientLibrary/Auth";
 import Loader from "./src/utils/Loader/Loader";
 import { colors } from "./src/components/UIComponents/commonStyles";
+import Footer from "./src/components/Navigation/Footer";
 
 function App() {
   const { setUser, isLoading, loadingMessage } = useUserStore();
@@ -23,6 +24,7 @@ function App() {
       <NavigationContainer>
         <SafeAreaView style={styles.container}>
           <BottomTabNavigator />
+          <Footer />
         </SafeAreaView>
       </NavigationContainer>
     </>
