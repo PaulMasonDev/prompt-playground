@@ -37,13 +37,6 @@ export const ExpertAI = () => {
 
   const inputSection = (
     <>
-      <CustomTextInput
-        value={prompt}
-        onChangeText={setPrompt}
-        onSubmit={handlePress}
-        placeholder="What do you need assistance with?"
-        clearTextOnFocus
-      />
       <RadioGroup
         // TODO: This functionality should be applied everywhere.
         options={[
@@ -60,6 +53,13 @@ export const ExpertAI = () => {
           { label: "Fifth Grader", value: "5th Grade Teacher" },
         ]}
         setExternalValue={setType}
+      />
+      <CustomTextInput
+        value={prompt}
+        onChangeText={setPrompt}
+        onSubmit={handlePress}
+        placeholder="What do you need assistance with?"
+        clearTextOnFocus
       />
       <CustomButton
         title="Submit"
