@@ -50,6 +50,7 @@ export const getPromptResponse = async (prompt: string, type: string) => {
 export interface CareerCraftPayload {
   resume: string;
   jobDesc: string;
+  extra: string;
   isCasual?: boolean;
   isHumorous?: boolean;
   isConcise?: boolean;
@@ -87,6 +88,7 @@ export const getResumeFeedback = async (payload: CareerCraftPayload) => {
       body: JSON.stringify({
         resume: payload.resume,
         jobDesc: payload.jobDesc,
+        extra: payload.extra,
       }),
     });
 
@@ -111,6 +113,7 @@ export const getResumeRewrite = async (payload: CareerCraftPayload) => {
       body: JSON.stringify({
         resume: payload.resume,
         jobDesc: payload.jobDesc,
+        extra: payload.extra,
       }),
     });
 

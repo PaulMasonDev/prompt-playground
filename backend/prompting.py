@@ -49,6 +49,7 @@ emoji_usage = """Ensure that you liberally use emojis to enhance the reponse."""
 class CoverLetterRequest(BaseModel):
     resume: str
     jobDesc: str
+    extra: str
     isCasual: bool
     isHumorous: bool
     isConcise: bool
@@ -63,6 +64,7 @@ async def get_cover_letter_response(
     return get_cover_letter(
         text,
         request.jobDesc,
+        request.extra,
         request.isCasual,
         request.isHumorous,
         request.isConcise,
@@ -73,6 +75,7 @@ async def get_cover_letter_response(
 def get_cover_letter(
     resume: str,
     jobDesc: str,
+    extra: str,
     isCasual: bool,
     isHumorous: bool,
     isConcise: bool,
@@ -119,19 +122,25 @@ def get_cover_letter(
             Strong Closing: End with a strong closing statement, expressing your enthusiasm
             for the role and the value you would bring to the company. 
             """
+    
+    if len(extra) > 0:
+        message += f"""I would also like you to weave this piece of information into the cover
+            letter as well: ${extra}"""
+        
     server_response = log_prompt_to_db(system_message, message, "cover", db, 1000, gpt_4_model)
     return server_response
 
 class ResumeFeedbackRequest(BaseModel):
     resume: str
     jobDesc: str
+    extra: str
 
 @router.post("/resume")
 def get_resume_feedback_response(request: ResumeFeedbackRequest, db: Session = Depends(get_db)):
     text = parse_PDF_from_file(request.resume)
-    return get_resume_feedback(text, request.jobDesc, db)
+    return get_resume_feedback(text, request.jobDesc, request.extra, db)
 
-def get_resume_feedback(resume: str, jobDesc: str, db: Session):
+def get_resume_feedback(resume: str, jobDesc: str, extra: str, db: Session):
     system_message = f"""As an expert resume writer, you excel at identifying key
         elements in a user's resume and effectively aligning them with the job description.
         Your approach ensures authenticity, focusing on the user's actual background and experience
@@ -141,19 +150,23 @@ def get_resume_feedback(resume: str, jobDesc: str, db: Session):
     message = f"""I need some feedback on how I can beef up my resume based on the job description.  Here is my resume: ${resume} 
         | Here is the job description: ${jobDesc} """
     
+    if len(extra) > 0:
+        message += f"""I would also like you to weave this piece of information into the feedback as well: ${extra}"""
+    
     server_response = log_prompt_to_db(system_message, message, "resume", db, 1000, gpt_4_model)
     return server_response
 
 class ResumeRewriteRequest(BaseModel):
     resume: str
     jobDesc: str
+    extra: str
 
 @router.post("/rewrite")
 def get_resume_rewrite_response(request: ResumeRewriteRequest, db: Session = Depends(get_db)):
     text = parse_PDF_from_file(request.resume)
-    return get_resume_rewrite(text, request.jobDesc, db)
+    return get_resume_rewrite(text, request.jobDesc, request.extra, db)
 
-def get_resume_rewrite(resume: str, jobDesc: str, db:Session):
+def get_resume_rewrite(resume: str, jobDesc: str, extra: str, db:Session):
     system_message = f"""Be prepared to rewrite a resume to better align with a specific
         job description. This information will be provided by a user. Use that resume as a base,
         ensuring all information reflects the user's real background without fabrication. First, identify 
@@ -165,6 +178,9 @@ def get_resume_rewrite(resume: str, jobDesc: str, db:Session):
     
     message = f"""I need rewrite on my resume based on the job description.  Here is my resume: ${resume} 
         | Here is the job description: ${jobDesc} """
+    
+    if len(extra) > 0:
+        message += f"""I would also like you to weave this piece of information into the rewrite as well: ${extra}"""
 
     server_response = log_prompt_to_db(system_message, message, "rewrite", db, 1000, gpt_4_model)
     return server_response

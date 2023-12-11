@@ -30,6 +30,7 @@ export const CareerCraftAI = () => {
     isHumorous: false,
     isConcise: false,
     isEmoji: false,
+    extra: "",
   });
 
   const [type, setType] = useState<CareerPrompt>(CareerPrompt.Cover);
@@ -139,6 +140,13 @@ export const CareerCraftAI = () => {
         onSubmit={handlePress}
         placeholder="Paste Job Description"
         multiline
+        clearTextOnFocus
+      />
+      <CustomTextInput
+        value={formData.extra}
+        onChangeText={(value) => updateFormData("extra", value)}
+        onSubmit={handlePress}
+        placeholder="Extra Info to help customize"
         clearTextOnFocus
       />
       <CustomButton
