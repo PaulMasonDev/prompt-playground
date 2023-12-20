@@ -7,6 +7,7 @@ import { CareerCraftAI } from "../Prompting/CareerCraftAI";
 import { EmailAI } from "../Prompting/EmailAI";
 import { bottomTabStyles } from "./bottomTabStyles";
 import Icon from "@expo/vector-icons/FontAwesome";
+import { ReachOutAI } from "../Prompting/ReachOutAI";
 
 const Tab = createBottomTabNavigator();
 
@@ -15,12 +16,13 @@ enum AIRoute {
   CareerCraftAI = "CareerCraftAI",
   EmailAI = "EmailAI",
   ExpertAI = "ExpertAI",
+  ReachOutAI = "ReachOutAI",
 }
 
 function BottomTabNavigator() {
   return (
     <Tab.Navigator
-      initialRouteName={AIRoute.CareerCraftAI}
+      initialRouteName={AIRoute.ReachOutAI}
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color, size }) => {
           let iconName: any;
@@ -31,6 +33,8 @@ function BottomTabNavigator() {
             iconName = "file-text";
           } else if (route.name === AIRoute.EmailAI) {
             iconName = "reply";
+          } else if (route.name === AIRoute.ReachOutAI) {
+            iconName = "comment";
           }
 
           // You can return any component that you like here!
@@ -61,6 +65,11 @@ function BottomTabNavigator() {
         name={AIRoute.ExpertAI}
         component={ExpertAI}
         options={{ tabBarAccessibilityLabel: AIRoute.ExpertAI }}
+      />
+      <Tab.Screen
+        name={AIRoute.ReachOutAI}
+        component={ReachOutAI}
+        options={{ tabBarAccessibilityLabel: AIRoute.ReachOutAI }}
       />
     </Tab.Navigator>
   );

@@ -5,21 +5,9 @@ from sqlalchemy.orm import Session
 from auth import get_db
 from pydantic import BaseModel
 from file_utils import parse_PDF_from_file
+from prompt_content import career_craft_generated_message, cover_letter_system_message, employee_connect_system_message, email_generated_message, expert_generated_message
 
 router = APIRouter()
-
-base_url_display = "https://prompt-playground-production.up.railway.app/home/"
-
-def get_generated_message(type: str):
-    return f"""Conclude your response at the very end with: 'Generated with
-        {type} @ {base_url_display}'"""
-
-def expert_generated_message():
-    return get_generated_message("ExpertAI")
-def career_craft_generated_message():
-    return get_generated_message("CareerCraftAI")
-def email_generated_message():
-    return get_generated_message("EmailAI")
 
 gpt_4_model="gpt-4-1106-preview"
 
@@ -82,17 +70,7 @@ def get_cover_letter(
     isEmoji: bool,
     db: Session
 ):
-    system_message = f"""As an expert in resume writing and recruitment, your task is to craft a unique and tailored cover letter.
-        Draw upon the provided resume, job description, and the company's website to align the letter
-        with the company's mission and values. Your writing should be professional, yet imbued with a
-        touch of humor to stand out. Strive for a balance between confidence and humility, ensuring
-        the letter resonates with authenticity and sincerity. You may use bullet points where you deem necessary
-        (use an emoji for them if needed). Bullet points can be a powerful tool
-        in a cover letter when used judiciously. They should complement, not replace, the narrative
-        flow of your letter. The key is to balance brevity and impact with a personal and engaging tone.
-        After the cover letter ending, include a friendly message separate from the cover letter advising them to
-        verify the cover letter accuracy with their actual skills and experience before applying to jobs.
-        {career_craft_generated_message()}"""
+    system_message = cover_letter_system_message
     
     if isEmoji == True:
         system_message += emoji_usage
@@ -201,4 +179,24 @@ def get_email_response(original: str, goal: str, db: Session):
         message = message + f"I also want to be sure that it achieves this purpose: {goal}"
     
     server_response = log_prompt_to_db(system_message, message, "email", db, 1000, gpt_4_model)
+    return server_response
+
+class EmployeeConnectRequest(BaseModel):
+    jobDesc: str
+    name: str
+    title: str
+
+@router.post("/employee-connect")
+def get_employee_connect_response(request: EmployeeConnectRequest, db: Session = Depends(get_db)):
+    return get_employee_connect(request, db)
+
+def get_employee_connect(request: EmployeeConnectRequest, db: Session):
+    system_message = employee_connect_system_message
+    
+    message = f"""There is an employee I am reaching out to. Here is the job description for
+        the company that the employee is a part of who I am reaching out to. Job Desc: {request.jobDesc}. 
+        The name of the person is {request.name} and their title is {request.title}. You can contextualize your message
+        to their title. There is a limit of 200 characters to this message as well"""
+    
+    server_response = log_prompt_to_db(system_message, message, "employee-connect", db, 1000, gpt_4_model)
     return server_response

@@ -1,3 +1,4 @@
+import { ReachOutPayload } from "../components/Prompting/ReachOutAI";
 import { BACKEND_API } from "../constants";
 
 export interface FeedbackPayload {
@@ -145,6 +146,27 @@ export const getEmailResponse = async (original: string, goal: string) => {
   } catch (error) {
     console.error(error);
     alert(`Error, An error occurred getting your e-mail response. ${error}`);
+    return error;
+  }
+};
+
+export const getEmployeeConnectResponse = async (payload: ReachOutPayload) => {
+  try {
+    const response = await fetch(`${BACKEND_API}/prompting/employee-connect`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(error);
+    alert(
+      `Error, An error occurred getting your resume rewrite. Error: ${error}`
+    );
     return error;
   }
 };
