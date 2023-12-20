@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from auth import get_db
 from pydantic import BaseModel
 from file_utils import parse_PDF_from_file
-from prompt_content import career_craft_generated_message, cover_letter_system_message, employee_connect_system_message, email_generated_message, expert_generated_message
+from prompt_content import career_craft_generated_message, cover_letter_system_message, resume_rewrite_system_message, employee_connect_system_message, email_generated_message, expert_generated_message
 
 router = APIRouter()
 
@@ -105,7 +105,7 @@ def get_cover_letter(
         message += f"""I would also like you to weave this piece of information into the cover
             letter as well: ${extra}"""
         
-    server_response = log_prompt_to_db(system_message, message, "cover", db, 1000, gpt_4_model)
+    server_response = log_prompt_to_db(system_message, message, "cover", db, 1000)
     return server_response
 
 class ResumeFeedbackRequest(BaseModel):
@@ -131,7 +131,7 @@ def get_resume_feedback(resume: str, jobDesc: str, extra: str, db: Session):
     if len(extra) > 0:
         message += f"""I would also like you to weave this piece of information into the feedback as well: ${extra}"""
     
-    server_response = log_prompt_to_db(system_message, message, "resume", db, 1000, gpt_4_model)
+    server_response = log_prompt_to_db(system_message, message, "resume", db, 1000)
     return server_response
 
 class ResumeRewriteRequest(BaseModel):
@@ -145,22 +145,23 @@ def get_resume_rewrite_response(request: ResumeRewriteRequest, db: Session = Dep
     return get_resume_rewrite(text, request.jobDesc, request.extra, db)
 
 def get_resume_rewrite(resume: str, jobDesc: str, extra: str, db:Session):
-    system_message = f"""Be prepared to rewrite a resume to better align with a specific
-        job description. This information will be provided by a user. Use that resume as a base,
-        ensuring all information reflects the user's real background without fabrication. First, identify 
-        places where the resume should be updated. Go through each of those places and update them.
-        After the rewrites, place them in the appropriate places back into the original resume provided
-        by the user. Also provide a brief explanation of the major content changes made, excluding
-        formatting details. Conclude with a reminder for the user to verify the accuracy of the resume
-        in relation to their skills and experience before applying for jobs. {career_craft_generated_message()}"""
-    
+    # Chat GPT-4 message:
+    # system_message = f"""Be prepared to rewrite a resume to better align with a specific
+    #     job description. This information will be provided by a user. Use that resume as a base,
+    #     ensuring all information reflects the user's real background without fabrication. First, identify 
+    #     places where the resume should be updated. Go through each of those places and update them.
+    #     After the rewrites, place them in the appropriate places back into the original resume provided
+    #     by the user. Also provide a brief explanation of the major content changes made, excluding
+    #     formatting details. Conclude with a reminder for the user to verify the accuracy of the resume
+    #     in relation to their skills and experience before applying for jobs. {career_craft_generated_message()}"""
+    system_message = resume_rewrite_system_message
     message = f"""I need rewrite on my resume based on the job description.  Here is my resume: ${resume} 
         | Here is the job description: ${jobDesc} """
     
     if len(extra) > 0:
         message += f"""I would also like you to weave this piece of information into the rewrite as well: ${extra}"""
 
-    server_response = log_prompt_to_db(system_message, message, "rewrite", db, 1000, gpt_4_model)
+    server_response = log_prompt_to_db(system_message, message, "rewrite", db, 1000)
     return server_response
 
 @router.get("/email")
@@ -178,7 +179,7 @@ def get_email_response(original: str, goal: str, db: Session):
     if len(goal) > 0:
         message = message + f"I also want to be sure that it achieves this purpose: {goal}"
     
-    server_response = log_prompt_to_db(system_message, message, "email", db, 1000, gpt_4_model)
+    server_response = log_prompt_to_db(system_message, message, "email", db, 1000)
     return server_response
 
 class EmployeeConnectRequest(BaseModel):
@@ -198,5 +199,5 @@ def get_employee_connect(request: EmployeeConnectRequest, db: Session):
         The name of the person is {request.name} and their title is {request.title}. You can contextualize your message
         to their title. There is a limit of 200 characters to this message as well"""
     
-    server_response = log_prompt_to_db(system_message, message, "employee-connect", db, 1000, gpt_4_model)
+    server_response = log_prompt_to_db(system_message, message, "employee-connect", db, 1000)
     return server_response
