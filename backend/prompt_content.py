@@ -17,7 +17,9 @@ def career_craft_generated_message():
 def email_generated_message():
     return get_generated_message("EmailAI")
 def employee_connect_generated_message():
-    return get_generated_message("EmailAI")
+    return get_generated_message("ReachOutAI")
+def interview_questions_generated_message():
+    return get_generated_message("InterviewAI")
 
 #GPT-4 Version:
 cover_letter_system_message = f"""Here are some do's and dont's when writing a cover letter:

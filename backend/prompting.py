@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from auth import get_db
 from pydantic import BaseModel
 from file_utils import parse_PDF_from_file
-from prompt_content import career_craft_generated_message, cover_letter_system_message, resume_rewrite_system_message, employee_connect_system_message, email_generated_message, expert_generated_message
+from prompt_content import career_craft_generated_message, cover_letter_system_message, interview_questions_generated_message, resume_rewrite_system_message, employee_connect_system_message, email_generated_message, expert_generated_message
 
 router = APIRouter()
 
@@ -146,8 +146,10 @@ def get_resume_rewrite_response(request: ResumeRewriteRequest, db: Session = Dep
 
 def get_resume_rewrite(resume: str, jobDesc: str, extra: str, db:Session):
     # Chat GPT-4 message:
-    system_message = f"""Be prepared to rewrite a resume to better align with a specific
-        job description. This information will be provided by a user. Use that resume as a base,
+    system_message = f"""You are an expert resume writer. Be prepared to rewrite a resume to better
+        align with a specific job description. Where applicable, try to use specific value add statements
+        such as "Enhanced conversion rates by X% with the implementation of this feature." 
+        The job description information and existing resume will be provided by a user. Use that resume as a base,
         ensuring all information reflects the user's real background without fabrication. First, identify 
         places where the resume should be updated. Go through each of those places and update them.
         After the rewrites, place them in the appropriate places back into the original resume provided
@@ -179,7 +181,7 @@ def get_email_response(original: str, goal: str, db: Session):
     if len(goal) > 0:
         message = message + f"I also want to be sure that it achieves this purpose: {goal}"
     
-    server_response = log_prompt_to_db(system_message, message, "email", db, 1000)
+    server_response = log_prompt_to_db(system_message, message, "email", db, 1000, gpt_4_model)
     return server_response
 
 class EmployeeConnectRequest(BaseModel):
@@ -199,5 +201,29 @@ def get_employee_connect(request: EmployeeConnectRequest, db: Session):
         The name of the person is {request.name} and their title is {request.title}. You can contextualize your message
         to their title. There is a limit of 200 characters to this message as well"""
     
-    server_response = log_prompt_to_db(system_message, message, "employee-connect", db, 1000)
+    server_response = log_prompt_to_db(system_message, message, "employee-connect", db, 1000, gpt_4_model)
     return server_response
+
+class InterviewQuestionsRequest(BaseModel):
+    jobDesc: str
+    website: str
+    number: str
+
+@router.post("/interview-questions")
+def get_interview_questions(request: InterviewQuestionsRequest, db: Session = Depends(get_db)):
+    return get_interview_questions_response(request, db)
+
+def get_interview_questions_response(request: InterviewQuestionsRequest, db: Session):
+    system_message = f"""You are an expert at coming up with interview questions an applicant would have for a prospective company
+        based upon years of experience in the recruiting industry. You know the types of questions to come up with that really identify workplace culture
+        through an interview. Your job is to generate with a list of {request.number} question(s).  The user will provide a job
+        description and optional website to assist with you coming up with the questions. {interview_questions_generated_message}"""
+    
+    message = f"""I need a list of {request.number} questions for a job interview I have coming up. 
+        Here is my job desc: {request.jobDesc}."""
+
+    if len(request.website) > 0:
+        message += f"""Here is the website: {request.website}"""
+    
+    server_response = log_prompt_to_db(system_message, message, "interview-questions", db, 1000, gpt_4_model)
+    return server_response    

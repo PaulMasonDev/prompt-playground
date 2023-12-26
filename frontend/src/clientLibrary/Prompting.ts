@@ -1,3 +1,4 @@
+import { InterviewQuestionsPayload } from "../components/Prompting/InterviewAI";
 import { ReachOutPayload } from "../components/Prompting/ReachOutAI";
 import { BACKEND_API } from "../constants";
 
@@ -165,7 +166,28 @@ export const getEmployeeConnectResponse = async (payload: ReachOutPayload) => {
   } catch (error) {
     console.error(error);
     alert(
-      `Error, An error occurred getting your resume rewrite. Error: ${error}`
+      `Error, An error occurred getting your employee connect message. Error: ${error}`
+    );
+    return error;
+  }
+};
+
+export const getInterviewQuestionsResponse = async (payload: InterviewQuestionsPayload) => {
+  try {
+    const response = await fetch(`${BACKEND_API}/prompting/interview-questions`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(error);
+    alert(
+      `Error, An error occurred getting your interview questions. Error: ${error}`
     );
     return error;
   }
