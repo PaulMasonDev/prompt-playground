@@ -5,7 +5,7 @@ import { colors } from "../UIComponents/commonStyles";
 const Footer = () => {
   return (
     <View style={styles.footer}>
-      <Text style={styles.text}>© 2023 Paul Mason. All rights reserved.</Text>
+      <Text style={styles.text}>© 2024 Paul Mason. All rights reserved.</Text>
     </View>
   );
 };
